@@ -1,0 +1,47 @@
+name: kidsphonics
+description: KidsPhonics - Mobile App for Grade 1 Learners
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_tts: ^4.0.2          # Text-to-speech / voice assistance
+  shared_preferences: ^2.2.2    # Progress saving
+  google_fonts: ^6.1.0          # Nunito + Fredoka One fonts
+  provider: ^6.1.1              # State management
+  lottie: ^3.0.0                # Animations (confetti etc.)
+  audioplayers: ^6.0.0          # Sound effects
+  speech_to_text: ^7.0.0        # Voice recognition / pronunciation check
+  permission_handler: ^11.3.1   # Microphone permission
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  http: ^1.2.2          # used by tools/generate_audio.dart only
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/audio/
+    - assets/audio/phonics/letter_sounds/
+    - assets/audio/phonics/vowel_sounds/
+    - assets/audio/phonics/rhyming_words/
+    - assets/audio/phonics/alphabet_order/
+    - assets/audio/phonics/sound_match/
+    - assets/audio/phonics/memory_flip/
+    - assets/audio/phonics/phonics_quiz/
+    - assets/audio/phonics/word_builder/
+    - assets/audio/phonics/say_it_right/
+    - assets/audio/phonics/feedback/
+    - assets/audio/phonics/sound_match/
+    - assets/audio/phonics/memory_flip/
+    - assets/audio/phonics/phonics_quiz/
+    - assets/audio/phonics/word_builder/
+    - assets/audio/phonics/say_it_right/
+    - assets/audio/phonics/feedback/
