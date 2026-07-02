@@ -73,10 +73,11 @@ final List<SoundRound> soundRounds = [
 
 // Quiz questions
 class QuizQuestion {
-  final String emoji;
+  final String emoji;       // question image
   final String question;
   final String correctLetter;
   final List<String> options; // 4 letters
+  final List<String> optionEmojis; // one emoji per option — DIFFERENT from question emoji
   final String voiceHint;
 
   QuizQuestion({
@@ -84,16 +85,32 @@ class QuizQuestion {
     required this.question,
     required this.correctLetter,
     required this.options,
+    required this.optionEmojis,
     required this.voiceHint,
   });
 }
 
 final List<QuizQuestion> quizQuestions = [
-  QuizQuestion(emoji: '🐶', question: 'What sound does Dog start with?',     correctLetter: 'D', options: ['B','C','D','G'], voiceHint: 'Dog! Duh... Dog! The first sound is D!'),
-  QuizQuestion(emoji: '☀️', question: 'What sound does Sun start with?',     correctLetter: 'S', options: ['S','P','T','R'], voiceHint: 'Sun! Sss... Sun! The first sound is S!'),
-  QuizQuestion(emoji: '🍎', question: 'What sound does Apple start with?',   correctLetter: 'A', options: ['A','E','I','O'], voiceHint: 'Apple! Ahh... Apple! The first sound is A!'),
-  QuizQuestion(emoji: '🐟', question: 'What sound does Fish start with?',    correctLetter: 'F', options: ['H','F','V','B'], voiceHint: 'Fish! Fff... Fish! The first sound is F!'),
-  QuizQuestion(emoji: '🌈', question: 'What sound does Rainbow start with?', correctLetter: 'R', options: ['L','W','R','N'], voiceHint: 'Rainbow! Rrr... Rainbow! The first sound is R!'),
+  QuizQuestion(emoji: '🐶', question: 'What sound does Dog start with?',
+      correctLetter: 'D', options: ['B','C','D','G'],
+      optionEmojis: ['🍌','🐱','🌈','🍇'],
+      voiceHint: 'Dog! Duh... Dog! The first sound is D!'),
+  QuizQuestion(emoji: '☀️', question: 'What sound does Sun start with?',
+      correctLetter: 'S', options: ['S','P','T','R'],
+      optionEmojis: ['🌸','🐷','🐢','🌈'],
+      voiceHint: 'Sun! Sss... Sun! The first sound is S!'),
+  QuizQuestion(emoji: '🍎', question: 'What sound does Apple start with?',
+      correctLetter: 'A', options: ['A','E','I','O'],
+      optionEmojis: ['🦋','🥚','🍦','🐙'],
+      voiceHint: 'Apple! Ahh... Apple! The first sound is A!'),
+  QuizQuestion(emoji: '🐟', question: 'What sound does Fish start with?',
+      correctLetter: 'F', options: ['H','F','V','B'],
+      optionEmojis: ['🏠','🍇','🎻','🍌'],
+      voiceHint: 'Fish! Fff... Fish! The first sound is F!'),
+  QuizQuestion(emoji: '🌈', question: 'What sound does Rainbow start with?',
+      correctLetter: 'R', options: ['L','W','R','N'],
+      optionEmojis: ['🦁','🐋','🌸','🌰'],
+      voiceHint: 'Rainbow! Rrr... Rainbow! The first sound is R!'),
 ];
 
 // Memory pairs: letter ↔ picture
@@ -150,23 +167,59 @@ List<SoundRound> soundRoundsForDifficulty(Difficulty d) {
 // ── Difficulty-tiered Quiz questions ─────────────────────────────────────
 
 final List<QuizQuestion> quizQuestionsEasy = [
-  QuizQuestion(emoji: '🍎', question: 'What sound does Apple start with?',   correctLetter: 'A', options: ['A','B','C'], voiceHint: 'Apple! Ahh... Apple! The first sound is A!'),
-  QuizQuestion(emoji: '🍌', question: 'What sound does Banana start with?',  correctLetter: 'B', options: ['B','C','D'], voiceHint: 'Banana! Buh... Banana! The first sound is B!'),
-  QuizQuestion(emoji: '🐱', question: 'What sound does Cat start with?',     correctLetter: 'C', options: ['A','C','D'], voiceHint: 'Cat! Cuh... Cat! The first sound is C!'),
-  QuizQuestion(emoji: '🐶', question: 'What sound does Dog start with?',     correctLetter: 'D', options: ['B','D','F'], voiceHint: 'Dog! Duh... Dog! The first sound is D!'),
-  QuizQuestion(emoji: '🥚', question: 'What sound does Egg start with?',     correctLetter: 'E', options: ['A','E','I'], voiceHint: 'Egg! Ehh... Egg! The first sound is E!'),
+  QuizQuestion(emoji: '🍎', question: 'What sound does Apple start with?',
+      correctLetter: 'A', options: ['A','B','C'],
+      optionEmojis: ['🦋','🍌','🐱'],
+      voiceHint: 'Apple! Ahh... Apple! The first sound is A!'),
+  QuizQuestion(emoji: '🍌', question: 'What sound does Banana start with?',
+      correctLetter: 'B', options: ['B','C','D'],
+      optionEmojis: ['🌸','🐱','🐶'],
+      voiceHint: 'Banana! Buh... Banana! The first sound is B!'),
+  QuizQuestion(emoji: '🐱', question: 'What sound does Cat start with?',
+      correctLetter: 'C', options: ['A','C','D'],
+      optionEmojis: ['🍎','🌈','🐶'],
+      voiceHint: 'Cat! Cuh... Cat! The first sound is C!'),
+  QuizQuestion(emoji: '🐶', question: 'What sound does Dog start with?',
+      correctLetter: 'D', options: ['B','D','F'],
+      optionEmojis: ['🍌','🌸','🐟'],
+      voiceHint: 'Dog! Duh... Dog! The first sound is D!'),
+  QuizQuestion(emoji: '🥚', question: 'What sound does Egg start with?',
+      correctLetter: 'E', options: ['A','E','I'],
+      optionEmojis: ['🍎','🌈','🍦'],
+      voiceHint: 'Egg! Ehh... Egg! The first sound is E!'),
 ];
 
 final List<QuizQuestion> quizQuestionsMedium = quizQuestions;
 
 final List<QuizQuestion> quizQuestionsHard = [
-  QuizQuestion(emoji: '🌙', question: 'What sound does Moon start with?',    correctLetter: 'M', options: ['M','N','R','W'], voiceHint: 'Moon! Mmm... Moon! The first sound is M!'),
-  QuizQuestion(emoji: '🪁', question: 'What sound does Kite start with?',   correctLetter: 'K', options: ['K','C','G','Q'], voiceHint: 'Kite! Kuh... Kite! The first sound is K!'),
-  QuizQuestion(emoji: '🦁', question: 'What sound does Lion start with?',    correctLetter: 'L', options: ['L','R','N','W'], voiceHint: 'Lion! Lll... Lion! The first sound is L!'),
-  QuizQuestion(emoji: '☂️', question: 'What sound does Umbrella start with?', correctLetter: 'U', options: ['U','A','O','E'], voiceHint: 'Umbrella! Uhh... Umbrella! The first sound is U!'),
-  QuizQuestion(emoji: '🎻', question: 'What sound does Violin start with?',  correctLetter: 'V', options: ['V','B','F','W'], voiceHint: 'Violin! Vvv... Violin! The first sound is V!'),
-  QuizQuestion(emoji: '🐋', question: 'What sound does Whale start with?',   correctLetter: 'W', options: ['W','V','H','M'], voiceHint: 'Whale! Www... Whale! The first sound is W!'),
-  QuizQuestion(emoji: '🦓', question: 'What sound does Zebra start with?',   correctLetter: 'Z', options: ['Z','S','X','C'], voiceHint: 'Zebra! Zzz... Zebra! The first sound is Z!'),
+  QuizQuestion(emoji: '🌙', question: 'What sound does Moon start with?',
+      correctLetter: 'M', options: ['M','N','R','W'],
+      optionEmojis: ['🌸','🌰','🌈','🐋'],
+      voiceHint: 'Moon! Mmm... Moon! The first sound is M!'),
+  QuizQuestion(emoji: '🪁', question: 'What sound does Kite start with?',
+      correctLetter: 'K', options: ['K','C','G','Q'],
+      optionEmojis: ['🌸','🐱','🍇','👑'],
+      voiceHint: 'Kite! Kuh... Kite! The first sound is K!'),
+  QuizQuestion(emoji: '🦁', question: 'What sound does Lion start with?',
+      correctLetter: 'L', options: ['L','R','N','W'],
+      optionEmojis: ['🌸','🌈','🌰','🐋'],
+      voiceHint: 'Lion! Lll... Lion! The first sound is L!'),
+  QuizQuestion(emoji: '☂️', question: 'What sound does Umbrella start with?',
+      correctLetter: 'U', options: ['U','A','O','E'],
+      optionEmojis: ['🌸','🍎','🐙','🥚'],
+      voiceHint: 'Umbrella! Uhh... Umbrella! The first sound is U!'),
+  QuizQuestion(emoji: '🎻', question: 'What sound does Violin start with?',
+      correctLetter: 'V', options: ['V','B','F','W'],
+      optionEmojis: ['🌸','🍌','🐟','🐋'],
+      voiceHint: 'Violin! Vvv... Violin! The first sound is V!'),
+  QuizQuestion(emoji: '🐋', question: 'What sound does Whale start with?',
+      correctLetter: 'W', options: ['W','V','H','M'],
+      optionEmojis: ['🌸','🎻','🏠','🌙'],
+      voiceHint: 'Whale! Www... Whale! The first sound is W!'),
+  QuizQuestion(emoji: '🦓', question: 'What sound does Zebra start with?',
+      correctLetter: 'Z', options: ['Z','S','X','C'],
+      optionEmojis: ['🌸','☀️','🎶','🐱'],
+      voiceHint: 'Zebra! Zzz... Zebra! The first sound is Z!'),
 ];
 
 List<QuizQuestion> quizQuestionsForDifficulty(Difficulty d) {

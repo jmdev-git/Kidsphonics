@@ -262,15 +262,18 @@ class _AlphabetOrderScreenState extends State<AlphabetOrderScreen>
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
-                        'Tap the letters in A → Z order!  '
-                        'Next: ${_nextExpected < _totalLetters ? _letters[_nextExpected] : "🎉 Done!"}',
+                        // Easy: show the next letter as a guide
+                        // Medium/Hard: no hint — child must rely on own knowledge
+                        widget.difficulty == Difficulty.easy
+                            ? 'Tap A → Z in order!  Next: ${_nextExpected < _totalLetters ? _letters[_nextExpected] : "🎉 Done!"}'
+                            : 'Tap the letters in A → Z order!',
                         style: GoogleFonts.nunito(
                             fontSize: 12,
                             fontWeight: FontWeight.w900,
                             color: const Color(0xFF80CBC4)),
                       ),
                     ),
-                    // Speak the next expected letter
+                    // Speak button — always available as audio guide
                     if (_nextExpected < _totalLetters)
                       GestureDetector(
                         onTap: () => provider.speak(
@@ -341,7 +344,9 @@ class _AlphabetOrderScreenState extends State<AlphabetOrderScreen>
   Widget _buildTile(String letter) {
     final isDone = _correct.contains(letter);
     final isWrong = _wrongLetter == letter;
-    final isNext = !isDone &&
+    // Only highlight the next letter on Easy — Medium/Hard must figure it out
+    final isNext = widget.difficulty == Difficulty.easy &&
+        !isDone &&
         _nextExpected < _totalLetters &&
         letter == _letters[_nextExpected];
 

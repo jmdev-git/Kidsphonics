@@ -200,16 +200,21 @@ class _PhonicsQuizScreenState extends State<PhonicsQuizScreen> {
                   ),
                   const SizedBox(height: 14),
 
-                  // 4 letter options (2x2 grid)
+                  // Letter options — each has a DIFFERENT emoji from the question
+                  // so kids can't just picture-match; they must think about the sound
                   GridView.count(
                     crossAxisCount: 2,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     crossAxisSpacing: 8, mainAxisSpacing: 8,
                     childAspectRatio: 1.3,
-                    children: _shuffledOpts.map((lt) {
-                      final ltrData = allLetters.firstWhere((x) => x.letter == lt,
-                          orElse: () => LetterItem(letter: lt, emoji: '❓', word: lt, sound: ''));
+                    children: List.generate(_shuffledOpts.length, (idx) {
+                      final lt = _shuffledOpts[idx];
+                      // Find original index in _q.options to get its emoji
+                      final origIdx = _q.options.indexOf(lt);
+                      final optEmoji = origIdx >= 0 && origIdx < _q.optionEmojis.length
+                          ? _q.optionEmojis[origIdx]
+                          : '❓';
                       final isSelected = _selected == lt;
                       final isCorrect = lt == _q.correctLetter;
                       Color borderColor = Colors.white.withOpacity(0.1);
@@ -232,17 +237,18 @@ class _PhonicsQuizScreenState extends State<PhonicsQuizScreen> {
                             border: Border.all(color: borderColor, width: 2.5),
                           ),
                           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                            Text(ltrData.emoji, style: const TextStyle(fontSize: 34)),
+                            Text(optEmoji, style: const TextStyle(fontSize: 30)),
+                            const SizedBox(height: 4),
                             Text(lt,
                                 style: GoogleFonts.fredoka(fontSize: 24,
                                     color: (_answered && isCorrect) ? const Color(0xFF69F0AE) : Colors.white)),
                             Text('${lt.toLowerCase()}-sound',
                                 style: GoogleFonts.nunito(fontSize: 10, fontWeight: FontWeight.w800,
-                                    color: Colors.white.withOpacity(0.5))),
+                                    color: Colors.white.withOpacity(0.45))),
                           ]),
                         ),
                       );
-                    }).toList(),
+                    }),
                   ),
                   const SizedBox(height: 14),
 

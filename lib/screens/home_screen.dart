@@ -176,7 +176,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                   icon: '📖', title: 'Lessons',
                                   subtitle: 'Letter sounds + pictures!',
                                   gradient: const LinearGradient(colors: [AppColors.teal, AppColors.tealDark]),
-                                  badge: '3 New!',
                                   onTap: () => Navigator.push(context,
                                       MaterialPageRoute(builder: (_) => const LessonsScreen())),
                                 ),

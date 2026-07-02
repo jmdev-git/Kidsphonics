@@ -25,40 +25,40 @@ class _WordPuzzle {
 }
 
 final _puzzlesEasy = [
-  _WordPuzzle(emoji: '🐱', word: 'CAT',  blanks: ['C', '', 'T'], blankIndex: 1,
+  _WordPuzzle(emoji: '🐱', word: 'CAT',   blanks: ['C', '', 'T'], blankIndex: 1,
       tiles: ['A','B','E','O'], correctLetter: 'A', voiceHint: 'C... blank... T. What is in the middle?'),
-  _WordPuzzle(emoji: '🐶', word: 'DOG',  blanks: ['D', '', 'G'], blankIndex: 1,
+  _WordPuzzle(emoji: '🐶', word: 'DOG',   blanks: ['D', '', 'G'], blankIndex: 1,
       tiles: ['O','U','A','I'], correctLetter: 'O', voiceHint: 'D... blank... G. Fill in the middle!'),
-  _WordPuzzle(emoji: '🍎', word: 'APE',  blanks: ['', 'P', 'E'], blankIndex: 0,
-      tiles: ['A','B','C','D'], correctLetter: 'A', voiceHint: 'blank... P... E. What is the first letter?'),
+  _WordPuzzle(emoji: '🍎', word: 'APPLE', blanks: ['A', 'P', '', 'L', 'E'], blankIndex: 2,
+      tiles: ['P','B','C','D'], correctLetter: 'P', voiceHint: 'A... P... blank... L... E. What is the middle?'),
 ];
 
 final _puzzles = [
   _WordPuzzle(emoji: '🐱', word: 'CAT',  blanks: ['C', '', 'T'], blankIndex: 1,
-      tiles: ['A','B','A','E','O','I'], correctLetter: 'A', voiceHint: 'C... blank... T. What is in the middle?'),
+      tiles: ['A','B','E','O','I','S'], correctLetter: 'A', voiceHint: 'C... blank... T. What is in the middle?'),
   _WordPuzzle(emoji: '🐶', word: 'DOG',  blanks: ['D', '', 'G'], blankIndex: 1,
       tiles: ['O','U','A','I','E','B'], correctLetter: 'O', voiceHint: 'D... blank... G. Fill in the middle!'),
   _WordPuzzle(emoji: '☀️', word: 'SUN',  blanks: ['S', '', 'N'], blankIndex: 1,
       tiles: ['U','A','O','I','E','Y'], correctLetter: 'U', voiceHint: 'S... blank... N. What letter goes here?'),
-  _WordPuzzle(emoji: '🍎', word: 'APE',  blanks: ['', 'P', 'E'], blankIndex: 0,
-      tiles: ['A','B','C','D','E','F'], correctLetter: 'A', voiceHint: 'blank... P... E. What is the first letter?'),
-  _WordPuzzle(emoji: '🐟', word: 'FIN',  blanks: ['F', 'I', ''], blankIndex: 2,
-      tiles: ['N','M','P','B','R','S'], correctLetter: 'N', voiceHint: 'F... I... blank. What is the last letter?'),
+  _WordPuzzle(emoji: '🍎', word: 'APPLE', blanks: ['A', 'P', '', 'L', 'E'], blankIndex: 2,
+      tiles: ['A','P','C','D','E','F'], correctLetter: 'P', voiceHint: 'A... P... blank... L... E. What is the middle letter?'),
+  _WordPuzzle(emoji: '🐟', word: 'FISH',  blanks: ['F', 'I', 'S', ''], blankIndex: 3,
+      tiles: ['H','M','P','B','R','T'], correctLetter: 'H', voiceHint: 'F... I... S... blank. What is the last letter?'),
 ];
 
 final _puzzlesHard = [
-  _WordPuzzle(emoji: '☀️', word: 'SUN',  blanks: ['S', '', 'N'], blankIndex: 1,
+  _WordPuzzle(emoji: '☀️', word: 'SUN',     blanks: ['S', '', 'N'],          blankIndex: 1,
       tiles: ['U','A','O','I','E','Y'], correctLetter: 'U', voiceHint: 'S... blank... N. What letter goes here?'),
-  _WordPuzzle(emoji: '🐟', word: 'FIN',  blanks: ['F', 'I', ''], blankIndex: 2,
-      tiles: ['N','M','P','B','R','S'], correctLetter: 'N', voiceHint: 'F... I... blank. What is the last letter?'),
-  _WordPuzzle(emoji: '🌈', word: 'RAT',  blanks: ['R', '', 'T'], blankIndex: 1,
-      tiles: ['A','E','I','O','U','B'], correctLetter: 'A', voiceHint: 'R... blank... T. What vowel?'),
-  _WordPuzzle(emoji: '🏠', word: 'HUT',  blanks: ['H', '', 'T'], blankIndex: 1,
-      tiles: ['U','A','O','E','I','Y'], correctLetter: 'U', voiceHint: 'H... blank... T. What is the middle?'),
-  _WordPuzzle(emoji: '🦁', word: 'LIP',  blanks: ['L', 'I', ''], blankIndex: 2,
-      tiles: ['P','B','D','G','M','N'], correctLetter: 'P', voiceHint: 'L... I... blank. The last letter!'),
-  _WordPuzzle(emoji: '🌙', word: 'MOP',  blanks: ['', 'O', 'P'], blankIndex: 0,
-      tiles: ['M','N','W','B','D','G'], correctLetter: 'M', voiceHint: 'blank... O... P. What letter starts it?'),
+  _WordPuzzle(emoji: '🐟', word: 'FISH',    blanks: ['F', 'I', 'S', ''],     blankIndex: 3,
+      tiles: ['H','M','P','B','R','T'], correctLetter: 'H', voiceHint: 'F... I... S... blank. What is the last letter?'),
+  _WordPuzzle(emoji: '🌈', word: 'RAINBOW', blanks: ['R', 'A', 'I', '', 'B', 'O', 'W'], blankIndex: 3,
+      tiles: ['N','L','M','B','D','T'], correctLetter: 'N', voiceHint: 'R... A... I... blank... B... O... W. What letter is missing?'),
+  _WordPuzzle(emoji: '🏠', word: 'HOUSE',   blanks: ['H', 'O', '', 'S', 'E'], blankIndex: 2,
+      tiles: ['U','A','I','O','E','Y'], correctLetter: 'U', voiceHint: 'H... O... blank... S... E. What vowel goes here?'),
+  _WordPuzzle(emoji: '🦁', word: 'LION',    blanks: ['L', 'I', '', 'N'],     blankIndex: 2,
+      tiles: ['O','A','E','U','B','D'], correctLetter: 'O', voiceHint: 'L... I... blank... N. What letter goes here?'),
+  _WordPuzzle(emoji: '🌙', word: 'MOON',    blanks: ['M', 'O', '', 'N'],     blankIndex: 2,
+      tiles: ['O','A','U','I','E','Y'], correctLetter: 'O', voiceHint: 'M... O... blank... N. What is the missing letter?'),
 ];
 
 List<_WordPuzzle> _puzzlesForDifficulty(Difficulty d) {
@@ -320,12 +320,6 @@ class _WordBuilderScreenState extends State<WordBuilderScreen> with SingleTicker
                                 ),
                               );
                             }),
-                            const SizedBox(width: 10),
-                            SpeakButton(
-                              onTap: () => provider.speak(_puzzle.voiceHint),
-                              size: 40,
-                              bgColor: AppColors.purple,
-                            ),
                           ],
                         ),
                       ),
@@ -369,17 +363,30 @@ class _WordBuilderScreenState extends State<WordBuilderScreen> with SingleTicker
                   ),
                   const SizedBox(height: 14),
 
-                  // Voice guide chip
+                  // Voice guide chip — subtle, audio button is primary
                   Container(
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.04),
+                      color: Colors.white.withOpacity(0.03),
                       borderRadius: BorderRadius.circular(14),
                     ),
-                    child: Text('🔊 Voice: "${_puzzle.voiceHint}"',
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.nunito(fontSize: 12, fontWeight: FontWeight.w900,
-                            color: const Color(0xFFCE93D8))),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SpeakButton(
+                          onTap: () => provider.speak(_puzzle.voiceHint),
+                          size: 36,
+                          bgColor: AppColors.purple,
+                        ),
+                        const SizedBox(width: 10),
+                        Text('Tap 🔊 for a hint',
+                            style: GoogleFonts.nunito(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white.withOpacity(0.3))),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 14),
 
