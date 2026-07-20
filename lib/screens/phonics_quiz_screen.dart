@@ -30,6 +30,9 @@ class _PhonicsQuizScreenState extends State<PhonicsQuizScreen> {
   void initState() {
     super.initState();
     _shuffleOpts();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<AppProvider>().voiceFeedback.playIntroQuiz();
+    });
   }
 
   void _shuffleOpts() {
@@ -49,9 +52,11 @@ class _PhonicsQuizScreenState extends State<PhonicsQuizScreen> {
       _confettiKey.currentState?.fire();
       provider.addXP((5 * widget.difficulty.xpMultiplier).round());
       provider.addStar();
+      provider.voiceFeedback.playPraise();
       await provider.speak('Correct! ${_q.correctLetter} is the right answer! Well done!');
     } else {
       provider.audio.playWrong();
+      provider.voiceFeedback.playWrongQuiz();
       await provider.speak('Not quite! The answer is ${_q.correctLetter}! ${_q.voiceHint}');
     }
   }
@@ -74,6 +79,7 @@ class _PhonicsQuizScreenState extends State<PhonicsQuizScreen> {
     provider.addXP((20 * widget.difficulty.xpMultiplier).round());
     provider.audio.playWin();
     _confettiKey.currentState?.fire();
+    provider.voiceFeedback.playWinByScore(_correct, _questions.length, game: 'quiz');
     showDialog(context: context, barrierDismissible: false, builder: (_) => AlertDialog(
       backgroundColor: AppColors.darkBg,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
@@ -118,6 +124,23 @@ class _PhonicsQuizScreenState extends State<PhonicsQuizScreen> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15))),
             child: Text('🎯 Change Difficulty',
                 style: GoogleFonts.fredoka(color: AppColors.green, fontSize: 15)),
+          ),
+        ),
+        const SizedBox(height: 8),
+        SizedBox(
+          width: double.infinity,
+          child: OutlinedButton(
+            onPressed: () {
+              Navigator.pop(context); // close dialog
+              Navigator.pop(context); // close game screen
+            },
+            style: OutlinedButton.styleFrom(
+                side: BorderSide(color: Colors.white.withOpacity(0.15)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15))),
+            child: Text('← Back to Lessons',
+                style: GoogleFonts.fredoka(
+                    color: Colors.white54, fontSize: 15)),
           ),
         ),
       ]),

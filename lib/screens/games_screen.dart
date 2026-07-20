@@ -10,6 +10,9 @@ import 'phonics_quiz_screen.dart';
 import 'word_builder_screen.dart';
 import 'voice_recognition_screen.dart';
 import 'alphabet_order_screen.dart';
+import 'missing_vowel_screen.dart';
+import 'picture_word_match_screen.dart';
+import 'sound_position_screen.dart';
 import 'lessons_screen.dart';
 import 'progress_screen.dart';
 
@@ -185,6 +188,64 @@ class GamesScreen extends StatelessWidget {
                       gameTitle: 'Alphabet Order',
                       gameIcon: '🔤',
                       builder: (d) => AlphabetOrderScreen(difficulty: d),
+                    ),
+                  ),
+                  const SizedBox(height: 18),
+
+                  // ── Vowel & Word section ──
+                  _SectionLabel(
+                    label: '🔵 Vowels & Words',
+                    color: const Color(0xFFCE93D8),
+                    pill: 'New',
+                    pillColor: const Color(0xFF6A0DAD),
+                  ),
+                  const SizedBox(height: 10),
+                  Row(children: [
+                    Expanded(child: _GameCard(
+                      icon: '🔵', title: 'Missing Vowel',
+                      desc: 'Fill in the missing vowel!',
+                      xp: '+8 XP',
+                      gradient: const LinearGradient(colors: [Color(0xFF6A0DAD), Color(0xFF4A0080)]),
+                      textColor: const Color(0xFFE1BEE7),
+                      xpColor: const Color(0xFFCE93D8),
+                      onTap: () => _launchGame(
+                        context: context,
+                        gameTitle: 'Missing Vowel',
+                        gameIcon: '🔵',
+                        builder: (d) => MissingVowelScreen(difficulty: d),
+                      ),
+                    )),
+                    const SizedBox(width: 10),
+                    Expanded(child: _GameCard(
+                      icon: '🖼️', title: 'Picture Match',
+                      desc: 'Match the word to its picture!',
+                      xp: '+8 XP',
+                      gradient: const LinearGradient(colors: [AppColors.blue, AppColors.blueDark]),
+                      textColor: const Color(0xFFBBDEFB),
+                      xpColor: const Color(0xFF90CAF9),
+                      onTap: () => _launchGame(
+                        context: context,
+                        gameTitle: 'Picture Match',
+                        gameIcon: '🖼️',
+                        builder: (d) => PictureWordMatchScreen(difficulty: d),
+                      ),
+                    )),
+                  ]),
+                  const SizedBox(height: 10),
+                  _GameCard(
+                    icon: '📍', title: 'Sound Position',
+                    desc: 'Is the sound at the beginning, middle, or end?',
+                    xp: '+8 XP per round',
+                    gradient: const LinearGradient(
+                        colors: [Color(0xFF00796B), Color(0xFF004D40)]),
+                    textColor: const Color(0xFFB2DFDB),
+                    xpColor: const Color(0xFF80CBC4),
+                    wide: true,
+                    onTap: () => _launchGame(
+                      context: context,
+                      gameTitle: 'Sound Position',
+                      gameIcon: '📍',
+                      builder: (d) => SoundPositionScreen(difficulty: d),
                     ),
                   ),
                 ],

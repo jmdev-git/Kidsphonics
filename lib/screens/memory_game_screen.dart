@@ -40,6 +40,9 @@ class _MemoryGameScreenState extends State<MemoryGameScreen> {
   void initState() {
     super.initState();
     _initCards();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<AppProvider>().voiceFeedback.playIntroMemory();
+    });
   }
 
   void _initCards() {
@@ -78,6 +81,7 @@ class _MemoryGameScreenState extends State<MemoryGameScreen> {
         a.isMatched = true; b.isMatched = true;
         _matchCount++;
         provider.audio.playCorrect();
+        provider.voiceFeedback.playPraise();
         provider.speak('Great match! ${a.id} goes with the picture!');
         provider.addXP((5 * widget.difficulty.xpMultiplier).round());
         provider.addStar();
@@ -85,11 +89,13 @@ class _MemoryGameScreenState extends State<MemoryGameScreen> {
           _confettiKey.currentState?.fire();
           provider.audio.playWin();
           provider.addXP((10 * widget.difficulty.xpMultiplier).round());
+          provider.voiceFeedback.playWinMemory();
           await Future.delayed(const Duration(milliseconds: 400));
           if (mounted) _showWinDialog();
         }
       } else {
         provider.audio.playWrong();
+        provider.voiceFeedback.playWrongMemory();
         a.isFlipped = false; b.isFlipped = false;
       }
       setState(() { _flipped = []; _locked = false; });
@@ -135,6 +141,23 @@ class _MemoryGameScreenState extends State<MemoryGameScreen> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15))),
             child: Text('🎯 Change Difficulty',
                 style: GoogleFonts.fredoka(color: AppColors.blue, fontSize: 15)),
+          ),
+        ),
+        const SizedBox(height: 8),
+        SizedBox(
+          width: double.infinity,
+          child: OutlinedButton(
+            onPressed: () {
+              Navigator.pop(context); // close dialog
+              Navigator.pop(context); // close game screen
+            },
+            style: OutlinedButton.styleFrom(
+                side: BorderSide(color: Colors.white.withOpacity(0.15)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15))),
+            child: Text('← Back to Lessons',
+                style: GoogleFonts.fredoka(
+                    color: Colors.white54, fontSize: 15)),
           ),
         ),
       ]),

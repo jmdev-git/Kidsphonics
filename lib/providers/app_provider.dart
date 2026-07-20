@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/audio_service.dart';
 import '../services/phonics_audio_service.dart';
+import '../services/voice_feedback_service.dart';
 
 class AppProvider extends ChangeNotifier {
   final AudioService audio = AudioService();
   final PhonicsAudioService phonicsAudio = PhonicsAudioService();
+  final VoiceFeedbackService voiceFeedback = VoiceFeedbackService();
 
   bool _voiceEnabled = true;
   bool _sfxEnabled = true;
@@ -118,9 +120,18 @@ class AppProvider extends ChangeNotifier {
   // ── XP / Progress ─────────────────────────────────────────────────────────
 
   void addXP(int amount) {
+    final prevXp    = _xp;
+    final prevLevel = level;
     _xp += amount;
     notifyListeners();
     _savePrefs();
+    // Check milestones after XP change
+    voiceFeedback.checkMilestones(
+      learnedCount: _learnedLetters.length, xp: _xp,
+      streak: _streak, prevLearnedCount: _learnedLetters.length,
+      prevXp: prevXp, prevStreak: _streak,
+      level: level, prevLevel: prevLevel,
+    );
   }
 
   void addStar() {
@@ -131,10 +142,19 @@ class AppProvider extends ChangeNotifier {
 
   void markLetterLearned(String letter) {
     if (_learnedLetters.contains(letter)) return;
+    final prevCount = _learnedLetters.length;
+    final prevLevel = level;
     _learnedLetters.add(letter);
     _stars++;
     notifyListeners();
     _savePrefs();
+    // Check milestones after new letter
+    voiceFeedback.checkMilestones(
+      learnedCount: _learnedLetters.length, xp: _xp,
+      streak: _streak, prevLearnedCount: prevCount,
+      prevXp: _xp, prevStreak: _streak,
+      level: level, prevLevel: prevLevel,
+    );
   }
 
   void markRhymingWordsDone() {

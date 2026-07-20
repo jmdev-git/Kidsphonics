@@ -54,7 +54,9 @@ class _LetterSoundsScreenState extends State<LetterSoundsScreen>
     final provider = context.read<AppProvider>();
     setState(() => _isSpeaking = true);
     provider.audio.playTap();
+    final wasNew = !provider.learnedLetters.contains(_current.letter);
     provider.markLetterLearned(_current.letter);
+    if (wasNew) provider.voiceFeedback.playPraise();
     await provider.speak(_current.sound);
     await Future.delayed(const Duration(milliseconds: 1800));
     if (mounted) setState(() => _isSpeaking = false);

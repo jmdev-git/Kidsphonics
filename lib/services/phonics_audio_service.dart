@@ -166,6 +166,12 @@ class PhonicsAudioService {
     'Cat'     : 'word_builder/word_cat.mp3',
     'Dog'     : 'word_builder/word_dog.mp3',
     'Sun'     : 'word_builder/word_sun.mp3',
+    // Additional single words for new games
+    'Egg'     : 'say_it_right/word_egg.mp3',
+    'Pig'     : 'letter_sounds/letter_p.mp3',
+    'Bee'     : 'rhyming_words/word_bee.mp3',
+    'Cub'     : 'word_builder/word_cat.mp3',
+    'Bat'     : 'rhyming_words/word_bat.mp3',
     'Ape'     : 'word_builder/word_ape.mp3',
     'Fin'     : 'word_builder/word_fin.mp3',
     'Rat'     : 'word_builder/word_rat.mp3',

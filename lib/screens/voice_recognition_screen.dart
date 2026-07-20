@@ -48,6 +48,9 @@ class _VoiceRecognitionScreenState extends State<VoiceRecognitionScreen>
     _pulseAnim = Tween<double>(begin: 1.0, end: 1.18)
         .animate(CurvedAnimation(parent: _pulseCtrl, curve: Curves.easeInOut));
     _initSpeech();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<AppProvider>().voiceFeedback.playIntroVoice();
+    });
   }
 
   Future<void> _initSpeech() async {
@@ -113,9 +116,11 @@ class _VoiceRecognitionScreenState extends State<VoiceRecognitionScreen>
       provider.addStar();
       provider.audio.playCorrect();
       _confettiKey.currentState?.fire();
+      provider.voiceFeedback.playPraise();
       await provider.speak('Great job! You said ${_current['word']} correctly!');
     } else {
       provider.audio.playWrong();
+      provider.voiceFeedback.playWrong();
       await provider.speak(
           'Good try! Listen and try again. The word is ${_current['word']}. ${_current['hint']}');
     }
@@ -142,6 +147,7 @@ class _VoiceRecognitionScreenState extends State<VoiceRecognitionScreen>
     final provider = context.read<AppProvider>();
     provider.audio.playWin();
     provider.addXP(15);
+    provider.voiceFeedback.playWinVoice();
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -205,6 +211,23 @@ class _VoiceRecognitionScreenState extends State<VoiceRecognitionScreen>
               child: Text('🎯 Change Difficulty',
                   style: GoogleFonts.fredoka(
                       color: AppColors.teal, fontSize: 15)),
+            ),
+          ),
+          const SizedBox(height: 8),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton(
+              onPressed: () {
+                Navigator.pop(context); // close dialog
+                Navigator.pop(context); // close game screen
+              },
+              style: OutlinedButton.styleFrom(
+                  side: BorderSide(color: Colors.white.withOpacity(0.15)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15))),
+              child: Text('← Back to Lessons',
+                  style: GoogleFonts.fredoka(
+                      color: Colors.white54, fontSize: 15)),
             ),
           ),
         ]),

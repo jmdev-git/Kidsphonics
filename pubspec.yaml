@@ -22,7 +22,9 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.0
-  http: ^1.2.2          # used by tools/generate_audio.dart only
+  http: ^1.2.2                    # used by tools/generate_audio.dart only
+  flutter_launcher_icons: ^0.14.3 # generates Android & iOS app icons
+  image: ^4.9.1
 
 flutter:
   uses-material-design: true
@@ -39,9 +41,12 @@ flutter:
     - assets/audio/phonics/word_builder/
     - assets/audio/phonics/say_it_right/
     - assets/audio/phonics/feedback/
-    - assets/audio/phonics/sound_match/
-    - assets/audio/phonics/memory_flip/
-    - assets/audio/phonics/phonics_quiz/
-    - assets/audio/phonics/word_builder/
-    - assets/audio/phonics/say_it_right/
-    - assets/audio/phonics/feedback/
+    - assets/audio/phonics/voice_feedback/
+
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: "assets/images/app_icon.png"
+  min_sdk_android: 21
+  adaptive_icon_background: "#4EA8DE"
+  adaptive_icon_foreground: "assets/images/app_icon.png"

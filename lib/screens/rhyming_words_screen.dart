@@ -198,6 +198,9 @@ class _RhymingWordsScreenState extends State<RhymingWordsScreen>
     _bounceAnim = Tween<double>(begin: 0, end: -8)
         .animate(CurvedAnimation(parent: _bounceCtrl, curve: Curves.easeInOut));
     _shuffleOptions();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<AppProvider>().voiceFeedback.playIntroRhyming();
+    });
   }
 
   @override
@@ -235,10 +238,12 @@ class _RhymingWordsScreenState extends State<RhymingWordsScreen>
       _confettiKey.currentState?.fire();
       provider.addXP((8 * widget.difficulty.xpMultiplier).round());
       provider.addStar();
+      provider.voiceFeedback.playPraise();
       await provider.speak(
           '${_round.word} and ${_round.correctRhyme} rhyme! ${_round.hint}');
     } else {
       provider.audio.playWrong();
+      provider.voiceFeedback.playWrongRhyming();
       await provider.speak(
           'Not quite! ${_round.word} rhymes with ${_round.correctRhyme}! ${_round.hint}');
     }
@@ -261,8 +266,9 @@ class _RhymingWordsScreenState extends State<RhymingWordsScreen>
     final provider = context.read<AppProvider>();
     provider.audio.playWin();
     provider.addXP((20 * widget.difficulty.xpMultiplier).round());
-    provider.markRhymingWordsDone(); // mark lesson as completed
+    provider.markRhymingWordsDone();
     _confettiKey.currentState?.fire();
+    provider.voiceFeedback.playWinByScore(_correct, _rounds.length, game: 'rhyming');
 
     showDialog(
       context: context,

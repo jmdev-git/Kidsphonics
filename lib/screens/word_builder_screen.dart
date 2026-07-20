@@ -96,6 +96,9 @@ class _WordBuilderScreenState extends State<WordBuilderScreen> with SingleTicker
     _shakeAnim = Tween<double>(begin: 0, end: 8).animate(
         CurvedAnimation(parent: _shakeCtrl, curve: Curves.elasticIn));
     _shuffledTiles = List<String>.from(_puzzle.tiles)..shuffle();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<AppProvider>().voiceFeedback.playIntroWordBuilder();
+    });
   }
 
   @override
@@ -120,6 +123,7 @@ class _WordBuilderScreenState extends State<WordBuilderScreen> with SingleTicker
       _confettiKey.currentState?.fire();
       provider.addXP((10 * widget.difficulty.xpMultiplier).round());
       provider.addStar();
+      provider.voiceFeedback.playPraise();
       await provider.speak('Wonderful! ${_puzzle.word}! You spelled it correctly!');
       await Future.delayed(const Duration(seconds: 2));
       if (!mounted) return;
@@ -136,6 +140,7 @@ class _WordBuilderScreenState extends State<WordBuilderScreen> with SingleTicker
       }
     } else {
       provider.audio.playWrong();
+      provider.voiceFeedback.playWrongWordBuilder();
       _shakeCtrl.forward(from: 0);
       await provider.speak('Try again! Listen to the hint!');
       await Future.delayed(const Duration(milliseconds: 1500));
@@ -157,6 +162,7 @@ class _WordBuilderScreenState extends State<WordBuilderScreen> with SingleTicker
     final provider = context.read<AppProvider>();
     provider.audio.playWin();
     provider.addXP((15 * widget.difficulty.xpMultiplier).round());
+    provider.voiceFeedback.playWinWordBuilder();
 
     showDialog(
       context: context,
@@ -213,6 +219,23 @@ class _WordBuilderScreenState extends State<WordBuilderScreen> with SingleTicker
               child: Text('🎯 Change Difficulty',
                   style: GoogleFonts.fredoka(
                       color: AppColors.purple, fontSize: 15)),
+            ),
+          ),
+          const SizedBox(height: 8),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton(
+              onPressed: () {
+                Navigator.pop(context); // close dialog
+                Navigator.pop(context); // close game screen
+              },
+              style: OutlinedButton.styleFrom(
+                  side: BorderSide(color: Colors.white.withOpacity(0.15)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15))),
+              child: Text('← Back to Lessons',
+                  style: GoogleFonts.fredoka(
+                      color: Colors.white54, fontSize: 15)),
             ),
           ),
         ]),

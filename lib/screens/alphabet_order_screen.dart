@@ -44,6 +44,9 @@ class _AlphabetOrderScreenState extends State<AlphabetOrderScreen>
     _shakeAnim = Tween<double>(begin: 0, end: 10)
         .animate(CurvedAnimation(parent: _shakeCtrl, curve: Curves.elasticIn));
     _setupRound();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<AppProvider>().voiceFeedback.playIntroAlphabet();
+    });
   }
 
   @override
@@ -83,15 +86,11 @@ class _AlphabetOrderScreenState extends State<AlphabetOrderScreen>
     final provider = context.read<AppProvider>();
 
     if (letter == _letters[_nextExpected]) {
-      // Correct
       provider.audio.playCorrect();
       provider.addXP((3 * widget.difficulty.xpMultiplier).round());
       provider.addStar();
-      setState(() {
-        _correct.add(letter);
-        _nextExpected++;
-        _wrongLetter = null;
-      });
+      provider.voiceFeedback.playPraise();
+      setState(() { _correct.add(letter); _nextExpected++; _wrongLetter = null; });
       await provider.speak(letter);
 
       if (_finished) {
@@ -100,12 +99,13 @@ class _AlphabetOrderScreenState extends State<AlphabetOrderScreen>
           _confettiKey.currentState?.fire();
           provider.audio.playWin();
           provider.addXP((15 * widget.difficulty.xpMultiplier).round());
+          provider.voiceFeedback.playWinAlphabet();
           _showWinDialog();
         }
       }
     } else {
-      // Wrong
       provider.audio.playWrong();
+      provider.voiceFeedback.playWrongAlphabet();
       setState(() => _wrongLetter = letter);
       _shakeCtrl.forward(from: 0);
       await provider.speak('Try ${_letters[_nextExpected]}! Find it in order!');
@@ -177,6 +177,23 @@ class _AlphabetOrderScreenState extends State<AlphabetOrderScreen>
               child: Text('🎯 Change Difficulty',
                   style: GoogleFonts.fredoka(
                       color: AppColors.teal, fontSize: 15)),
+            ),
+          ),
+          const SizedBox(height: 8),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton(
+              onPressed: () {
+                Navigator.pop(context); // close dialog
+                Navigator.pop(context); // close game screen
+              },
+              style: OutlinedButton.styleFrom(
+                  side: BorderSide(color: Colors.white.withOpacity(0.15)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15))),
+              child: Text('← Back to Lessons',
+                  style: GoogleFonts.fredoka(
+                      color: Colors.white54, fontSize: 15)),
             ),
           ),
         ]),

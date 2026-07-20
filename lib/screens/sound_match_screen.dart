@@ -36,6 +36,10 @@ class _SoundMatchScreenState extends State<SoundMatchScreen> {
   void initState() {
     super.initState();
     _opts = _shuffledOpts;
+    // Play game intro after a short delay
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<AppProvider>().voiceFeedback.playIntroSoundMatch();
+    });
   }
 
   void _nextRound() {
@@ -66,6 +70,7 @@ class _SoundMatchScreenState extends State<SoundMatchScreen> {
     provider.audio.playWin();
     provider.addXP((10 * widget.difficulty.xpMultiplier).round());
     _confettiKey.currentState?.fire();
+    provider.voiceFeedback.playWinSoundMatch();
 
     showDialog(
       context: context,
@@ -129,6 +134,23 @@ class _SoundMatchScreenState extends State<SoundMatchScreen> {
                       color: AppColors.orange, fontSize: 15)),
             ),
           ),
+          const SizedBox(height: 8),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton(
+              onPressed: () {
+                Navigator.pop(context); // close dialog
+                Navigator.pop(context); // close game screen
+              },
+              style: OutlinedButton.styleFrom(
+                  side: BorderSide(color: Colors.white.withOpacity(0.15)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15))),
+              child: Text('← Back to Lessons',
+                  style: GoogleFonts.fredoka(
+                      color: Colors.white54, fontSize: 15)),
+            ),
+          ),
         ]),
       ),
     );
@@ -150,12 +172,17 @@ class _SoundMatchScreenState extends State<SoundMatchScreen> {
       _confettiKey.currentState?.fire();
       provider.addXP((5 * widget.difficulty.xpMultiplier).round());
       provider.addStar();
+      provider.voiceFeedback.playPraise();
       await provider.speak('Yes! ${_round.correctLetter} is for ${_round.word}! Great job!');
       await Future.delayed(const Duration(milliseconds: 1200));
       if (mounted) _nextRound();
     } else {
       provider.audio.playWrong();
+      provider.voiceFeedback.playWrongSoundMatch();
       await provider.speak('Hmm, try again! Listen carefully!');
+      // Clear the wrong pick after a short delay so child can try again
+      await Future.delayed(const Duration(milliseconds: 800));
+      if (mounted) setState(() => _picks.remove(letter));
     }
   }
 
