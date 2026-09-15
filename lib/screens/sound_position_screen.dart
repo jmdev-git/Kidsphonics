@@ -185,7 +185,6 @@ class _SoundPositionScreenState extends State<SoundPositionScreen>
       await provider.speak('${_round.targetLetter} is at the ${_round.correctPos.label}! ${_round.hint}');
     } else {
       provider.audio.playWrong();
-      provider.voiceFeedback.playWrongQuiz();
       await provider.speak('Not quite! ${_round.hint}');
     }
   }

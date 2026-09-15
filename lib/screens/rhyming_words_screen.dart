@@ -243,7 +243,6 @@ class _RhymingWordsScreenState extends State<RhymingWordsScreen>
           '${_round.word} and ${_round.correctRhyme} rhyme! ${_round.hint}');
     } else {
       provider.audio.playWrong();
-      provider.voiceFeedback.playWrongRhyming();
       await provider.speak(
           'Not quite! ${_round.word} rhymes with ${_round.correctRhyme}! ${_round.hint}');
     }

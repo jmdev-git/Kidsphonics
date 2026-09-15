@@ -84,6 +84,7 @@ class AppProvider extends ChangeNotifier {
   /// If voice is disabled or phrase has no file, stays silent.
   Future<void> speak(String text) async {
     if (!_voiceEnabled) return;
+    await voiceFeedback.stop();
     await phonicsAudio.tryPlay(text);
   }
 

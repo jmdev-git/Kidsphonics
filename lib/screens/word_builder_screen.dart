@@ -140,7 +140,6 @@ class _WordBuilderScreenState extends State<WordBuilderScreen> with SingleTicker
       }
     } else {
       provider.audio.playWrong();
-      provider.voiceFeedback.playWrongWordBuilder();
       _shakeCtrl.forward(from: 0);
       await provider.speak('Try again! Listen to the hint!');
       await Future.delayed(const Duration(milliseconds: 1500));

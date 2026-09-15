@@ -16,6 +16,12 @@ class VoiceFeedbackService {
 
   static const _base = 'audio/phonics/voice_feedback';
 
+  Future<void> stop() async {
+    try {
+      await _player.stop();
+    } catch (_) {}
+  }
+
   Future<void> _play(String file) async {
     try {
       await _player.stop();

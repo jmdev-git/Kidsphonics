@@ -119,7 +119,7 @@ class PhonicsAudioService {
     'What letter does it start with?'  : 'sound_match/question.mp3',
     'Tap to hear the word!'            : 'sound_match/tap_to_hear.mp3',
     'Tap the correct starting letter!' : 'sound_match/tap_letter.mp3',
-    'Hmm, try again! Listen carefully!': 'sound_match/hint_cat.mp3', // fallback
+    'Hmm, try again! Listen carefully!': 'feedback/try_again.mp3',
 
     // ════════════════════════════════════════════════════════════════════════
     // MEMORY FLIP GAME (memory_game_screen.dart)
@@ -261,6 +261,12 @@ class PhonicsAudioService {
     // Lessons screen speak buttons
     'A says Ahh! B says Buh! C says Cuh!' : 'feedback/lesson_abc_intro.mp3',
   };
+
+  Future<void> stop() async {
+    try {
+      await _player.stop();
+    } catch (_) {}
+  }
 
   /// Play a pre-recorded file for [phrase].
   /// If no mapping exists or the file is missing, does nothing (silent).

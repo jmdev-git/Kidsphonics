@@ -178,7 +178,6 @@ class _SoundMatchScreenState extends State<SoundMatchScreen> {
       if (mounted) _nextRound();
     } else {
       provider.audio.playWrong();
-      provider.voiceFeedback.playWrongSoundMatch();
       await provider.speak('Hmm, try again! Listen carefully!');
       // Clear the wrong pick after a short delay so child can try again
       await Future.delayed(const Duration(milliseconds: 800));
