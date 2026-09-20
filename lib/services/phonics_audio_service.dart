@@ -16,7 +16,10 @@ class PhonicsAudioService {
   factory PhonicsAudioService() => _instance;
   PhonicsAudioService._internal();
 
+  // Main player for game speech feedback
   final AudioPlayer _player = AudioPlayer();
+  // Dedicated player for hint/speaker button taps — never blocked by game speech
+  final AudioPlayer _hintPlayer = AudioPlayer();
 
   // ── phrase → filename map ─────────────────────────────────────────────
   // Keys are the exact strings passed to speak() in letter_data.dart and
@@ -49,7 +52,7 @@ class PhonicsAudioService {
     'U says Uhh! Like Umbrella!'    : 'letter_sounds/letter_u.mp3',
     'V says Vvv! Like Violin!'      : 'letter_sounds/letter_v.mp3',
     'W says Www! Like Whale!'       : 'letter_sounds/letter_w.mp3',
-    'X says Ksss! Like Xylophone!'  : 'letter_sounds/letter_x.mp3',
+    'X says Ksss! Like X-Sign!'     : 'letter_sounds/letter_x.mp3',
     'Y says Yyy! Like Yarn!'        : 'letter_sounds/letter_y.mp3',
     'Z says Zzz! Like Zebra!'       : 'letter_sounds/letter_z.mp3',
 
@@ -109,17 +112,23 @@ class PhonicsAudioService {
     'Kite! Kuh... Kite!'            : 'sound_match/hint_kite.mp3',
     'Lion! Lll... Lion!'            : 'sound_match/hint_lion.mp3',
     'Moon! Mmm... Moon!'            : 'sound_match/hint_moon.mp3',
+    'Nut! Nnn... Nut!'              : 'sound_match/hint_nut.mp3',
+    'Octopus! Ohh... Octopus!'      : 'sound_match/hint_octopus.mp3',
+    'Pig! Puh... Pig!'              : 'sound_match/hint_pig.mp3',
     'Queen! Kww... Queen!'          : 'sound_match/hint_queen.mp3',
     'Rainbow! Rrr... Rainbow!'      : 'sound_match/hint_rainbow.mp3',
     'Sun! Sss... Sun!'              : 'sound_match/hint_sun.mp3',
+    'Turtle! Tuh... Turtle!'        : 'sound_match/hint_turtle.mp3',
     'Umbrella! Uhh... Umbrella!'    : 'sound_match/hint_umbrella.mp3',
     'Violin! Vvv... Violin!'        : 'sound_match/hint_violin.mp3',
     'Whale! Www... Whale!'          : 'sound_match/hint_whale.mp3',
+    'X-Sign! Ksss... X-Sign!'       : 'sound_match/hint_xylophone.mp3',
+    'Yarn! Yyy... Yarn!'            : 'sound_match/hint_yarn.mp3',
     'Zebra! Zzz... Zebra!'          : 'sound_match/hint_zebra.mp3',
     'What letter does it start with?'  : 'sound_match/question.mp3',
     'Tap to hear the word!'            : 'sound_match/tap_to_hear.mp3',
     'Tap the correct starting letter!' : 'sound_match/tap_letter.mp3',
-    'Hmm, try again! Listen carefully!': 'feedback/try_again.mp3',
+    'Hmm, try again! Listen carefully!': 'feedback/feedback_try_again.mp3',
 
     // ════════════════════════════════════════════════════════════════════════
     // MEMORY FLIP GAME (memory_game_screen.dart)
@@ -134,16 +143,25 @@ class PhonicsAudioService {
     // PHONICS QUIZ GAME (phonics_quiz_screen.dart)
     // ════════════════════════════════════════════════════════════════════════
     'Dog! Duh... Dog! The first sound is D!'         : 'phonics_quiz/quiz_dog.mp3',
-    'Sun! Sss... Sun! The first sound is S!'         : 'phonics_quiz/quiz_sun.mp3',
     'Apple! Ahh... Apple! The first sound is A!'     : 'phonics_quiz/quiz_apple.mp3',
+    'Banana! Buh... Banana! The first sound is B!'   : 'phonics_quiz/quiz_banana.mp3',
+    'Cat! Cuh... Cat! The first sound is C!'         : 'phonics_quiz/quiz_cat.mp3',
+    'Egg! Ehh... Egg! The first sound is E!'         : 'phonics_quiz/quiz_egg.mp3',
     'Fish! Fff... Fish! The first sound is F!'       : 'phonics_quiz/quiz_fish.mp3',
-    'Rainbow! Rrr... Rainbow! The first sound is R!' : 'phonics_quiz/quiz_rainbow.mp3',
-    'Moon! Mmm... Moon! The first sound is M!'       : 'phonics_quiz/quiz_moon.mp3',
+    'Grapes! Guh... Grapes! The first sound is G!'   : 'phonics_quiz/quiz_grapes.mp3',
+    'House! Hhh... House! The first sound is H!'     : 'phonics_quiz/quiz_house.mp3',
+    'Ice Cream! Ihh... Ice Cream! The first sound is I!' : 'phonics_quiz/quiz_ice_cream.mp3',
+    'Juice! Juh... Juice! The first sound is J!'     : 'phonics_quiz/quiz_juice.mp3',
     'Kite! Kuh... Kite! The first sound is K!'       : 'phonics_quiz/quiz_kite.mp3',
     'Lion! Lll... Lion! The first sound is L!'       : 'phonics_quiz/quiz_lion.mp3',
+    'Moon! Mmm... Moon! The first sound is M!'       : 'phonics_quiz/quiz_moon.mp3',
+    'Rainbow! Rrr... Rainbow! The first sound is R!' : 'phonics_quiz/quiz_rainbow.mp3',
+    'Sun! Sss... Sun! The first sound is S!'         : 'phonics_quiz/quiz_sun.mp3',
+    'Turtle! Tuh... Turtle! The first sound is T!'   : 'phonics_quiz/quiz_turtle.mp3',
     'Umbrella! Uhh... Umbrella! The first sound is U!' : 'phonics_quiz/quiz_umbrella.mp3',
     'Violin! Vvv... Violin! The first sound is V!'   : 'phonics_quiz/quiz_violin.mp3',
     'Whale! Www... Whale! The first sound is W!'     : 'phonics_quiz/quiz_whale.mp3',
+    'Yarn! Yyy... Yarn! The first sound is Y!'       : 'phonics_quiz/quiz_yarn.mp3',
     'Zebra! Zzz... Zebra! The first sound is Z!'     : 'phonics_quiz/quiz_zebra.mp3',
     'What sound does it start with?'                 : 'phonics_quiz/question.mp3',
     'Tap to listen!'                                 : 'phonics_quiz/tap_listen.mp3',
@@ -161,41 +179,66 @@ class PhonicsAudioService {
     'H... blank... T. What is the middle?'             : 'word_builder/hint_hut.mp3',
     'L... I... blank. The last letter!'                : 'word_builder/hint_lip.mp3',
     'blank... O... P. What letter starts it?'          : 'word_builder/hint_mop.mp3',
+    // Medium hints
+    'G... blank... A... P... blank... S. What letters are missing?' : 'word_builder/hint_grapes.mp3',
+    'blank... O... U... S... blank. What are the missing letters?'  : 'word_builder/hint_house.mp3',
+    'M... blank... blank... N. Two letters are missing!'            : 'word_builder/hint_moon.mp3',
+    'F... blank... S... blank. Fill in the two missing letters!'    : 'word_builder/hint_fish.mp3',
+    'L... blank... O... blank. What letters come next?'             : 'word_builder/hint_lion.mp3',
+    // Hard hints
+    'R... blank... I... blank... B... blank... W. Three letters missing!' : 'word_builder/hint_rainbow.mp3',
+    'blank... M... blank... R... E... blank... L... A. Three missing!'    : 'word_builder/hint_umbrella.mp3',
+    'blank... E... blank... R... blank. Fill in Z, B, and A!'             : 'word_builder/hint_zebra.mp3',
+    'T... blank... R... blank... L... blank. Three letters to find!'      : 'word_builder/hint_turtle.mp3',
+    'B... blank... N... blank... N... blank. What vowel fills all three?' : 'word_builder/hint_banana.mp3',
     'Spell the word!'                                  : 'word_builder/spell_word.mp3',
     'Tap the missing letter!'                          : 'word_builder/tap_missing.mp3',
-    'Cat'     : 'word_builder/word_cat.mp3',
-    'Dog'     : 'word_builder/word_dog.mp3',
-    'Sun'     : 'word_builder/word_sun.mp3',
-    // Additional single words for new games
-    'Egg'     : 'say_it_right/word_egg.mp3',
-    'Pig'     : 'letter_sounds/letter_p.mp3',
-    'Bee'     : 'rhyming_words/word_bee.mp3',
-    'Cub'     : 'word_builder/word_cat.mp3',
-    'Bat'     : 'rhyming_words/word_bat.mp3',
-    'Ape'     : 'word_builder/word_ape.mp3',
-    'Fin'     : 'word_builder/word_fin.mp3',
-    'Rat'     : 'word_builder/word_rat.mp3',
-    'Hut'     : 'word_builder/word_hut.mp3',
-    'Lip'     : 'word_builder/word_lip.mp3',
-    'Mop'     : 'word_builder/word_mop.mp3',
 
-    // ════════════════════════════════════════════════════════════════════════
-    // SAY IT RIGHT (voice_recognition_screen.dart)
-    // ════════════════════════════════════════════════════════════════════════
+    // ── Single word mappings (used by speaker buttons across all games) ───
+    'Ape'      : 'word_builder/word_ape.mp3',
     'Apple'    : 'say_it_right/word_apple.mp3',
-    'Ball'     : 'say_it_right/word_ball.mp3',
+    'Balloon'  : 'rhyming_words/word_balloon.mp3',
+    'Ball'     : 'rhyming_words/word_ball.mp3',
+    'Banana'   : 'say_it_right/word_banana.mp3',
+    'Bat'      : 'rhyming_words/word_bat.mp3',
+    'Bee'      : 'say_it_right/word_bee.mp3',
+    'Bug'      : 'rhyming_words/word_bug.mp3',
+    'Cake'     : 'rhyming_words/word_cake.mp3',
+    'Cat'      : 'say_it_right/word_cat.mp3',
+    'Cub'      : 'say_it_right/word_cub.mp3',
+    'Dog'      : 'say_it_right/word_dog.mp3',
+    'Egg'      : 'say_it_right/word_egg.mp3',
+    'Fin'      : 'word_builder/word_fin.mp3',
     'Fish'     : 'say_it_right/word_fish.mp3',
+    'Fox'      : 'rhyming_words/word_fox.mp3',
+    'Frog'     : 'rhyming_words/word_frog.mp3',
     'Grapes'   : 'say_it_right/word_grapes.mp3',
+    'Hat'      : 'rhyming_words/word_hat.mp3',
+    'Hog'      : 'say_it_right/word_hog.mp3',
     'House'    : 'say_it_right/word_house.mp3',
     'Ice Cream': 'say_it_right/word_ice_cream.mp3',
     'Juice'    : 'say_it_right/word_juice.mp3',
     'Kite'     : 'say_it_right/word_kite.mp3',
     'Lion'     : 'say_it_right/word_lion.mp3',
+    'Lip'      : 'word_builder/word_lip.mp3',
     'Moon'     : 'say_it_right/word_moon.mp3',
+    'Mop'      : 'word_builder/word_mop.mp3',
+    'Nut'      : 'say_it_right/word_nut.mp3',
+    'Oak'      : 'say_it_right/word_oak.mp3',
+    'Octopus'  : 'say_it_right/word_octopus.mp3',
+    'Pig'      : 'say_it_right/word_pig.mp3',
+    'Rain'     : 'say_it_right/word_rain.mp3',
     'Rainbow'  : 'say_it_right/word_rainbow.mp3',
+    'Rat'      : 'word_builder/word_rat.mp3',
+    'Snake'    : 'rhyming_words/word_snake.mp3',
+    'Star'     : 'rhyming_words/word_star.mp3',
+    'Sun'      : 'say_it_right/word_sun.mp3',
+    'Tree'     : 'rhyming_words/word_tree.mp3',
     'Umbrella' : 'say_it_right/word_umbrella.mp3',
     'Violin'   : 'say_it_right/word_violin.mp3',
-    'Xylophone': 'say_it_right/word_xylophone.mp3',
+    'Whale'    : 'say_it_right/word_whale.mp3',
+    'X-Sign'   : 'say_it_right/word_xray.mp3',
+    'Yarn'     : 'say_it_right/word_yarn.mp3',
     'Zebra'    : 'say_it_right/word_zebra.mp3',
     'Apple! A-pple'         : 'say_it_right/hint_word_apple.mp3',
     'Ball! B-all'           : 'say_it_right/hint_word_ball.mp3',
@@ -213,7 +256,7 @@ class PhonicsAudioService {
     'Rainbow! Rain-bow'     : 'say_it_right/hint_word_rainbow.mp3',
     'Umbrella! Um-brel-la'  : 'say_it_right/hint_word_umbrella.mp3',
     'Violin! Vi-o-lin'      : 'say_it_right/hint_word_violin.mp3',
-    'Xylophone! Xy-lo-phone': 'say_it_right/hint_word_xylophone.mp3',
+    'X-Sign! X-S-I-G-N'             : 'say_it_right/word_xray.mp3',
     'Zebra! Ze-bra'         : 'say_it_right/hint_word_zebra.mp3',
     'Tap the mic and say the word!'     : 'say_it_right/instruction.mp3',
     'Listening... speak now!'           : 'say_it_right/listening.mp3',
@@ -268,9 +311,8 @@ class PhonicsAudioService {
     } catch (_) {}
   }
 
-  /// Play a pre-recorded file for [phrase].
+  /// Play a pre-recorded file for [phrase] — main speech player.
   /// If no mapping exists or the file is missing, does nothing (silent).
-  /// TTS is no longer used — all audio comes from assets/audio/phonics/.
   Future<void> tryPlay(String phrase) async {
     final filename = _phraseMap[phrase.trim()];
     if (filename == null) return;
@@ -283,5 +325,19 @@ class PhonicsAudioService {
     }
   }
 
-  void dispose() => _player.dispose();
+  /// Play a hint/speaker button phrase — dedicated player, never blocked.
+  Future<void> tryPlayHint(String phrase) async {
+    final filename = _phraseMap[phrase.trim()];
+    if (filename == null) return;
+
+    try {
+      await _hintPlayer.stop();
+      await _hintPlayer.play(AssetSource('audio/phonics/$filename'));
+    } catch (_) {}
+  }
+
+  void dispose() {
+    _player.dispose();
+    _hintPlayer.dispose();
+  }
 }

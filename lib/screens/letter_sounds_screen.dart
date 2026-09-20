@@ -220,13 +220,13 @@ class _LetterSoundsScreenState extends State<LetterSoundsScreen>
                     ),
                     const SizedBox(height: 10),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(14, 0, 14, 20),
+                      padding: const EdgeInsets.fromLTRB(14, 0, 14, 24),
                       child: GridView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 5, crossAxisSpacing: 7, mainAxisSpacing: 7,
-                          childAspectRatio: 0.85,
+                          crossAxisCount: 5, crossAxisSpacing: 6, mainAxisSpacing: 6,
+                          childAspectRatio: 0.78,
                         ),
                         itemCount: _letters.length,
                         itemBuilder: (_, i) {
@@ -249,7 +249,7 @@ class _LetterSoundsScreenState extends State<LetterSoundsScreen>
                                     : isDone
                                     ? AppColors.teal.withOpacity(0.1)
                                     : Colors.white.withOpacity(0.05),
-                                borderRadius: BorderRadius.circular(14),
+                                borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
                                   color: isActive ? AppColors.gold
                                       : isDone ? AppColors.teal
@@ -259,12 +259,22 @@ class _LetterSoundsScreenState extends State<LetterSoundsScreen>
                               ),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Text(ltr.letter,
-                                      style: GoogleFonts.fredoka(fontSize: 20, color: Colors.white)),
-                                  Text(ltr.emoji, style: const TextStyle(fontSize: 18)),
+                                  FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(ltr.letter,
+                                        style: GoogleFonts.fredoka(
+                                            fontSize: 17, color: Colors.white)),
+                                  ),
+                                  FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(ltr.emoji,
+                                        style: const TextStyle(fontSize: 15)),
+                                  ),
                                   if (isDone)
-                                    const Text('⭐', style: TextStyle(fontSize: 10)),
+                                    const Text('⭐',
+                                        style: TextStyle(fontSize: 9)),
                                 ],
                               ),
                             ),

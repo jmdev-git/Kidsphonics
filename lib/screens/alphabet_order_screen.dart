@@ -89,8 +89,8 @@ class _AlphabetOrderScreenState extends State<AlphabetOrderScreen>
       provider.audio.playCorrect();
       provider.addXP((3 * widget.difficulty.xpMultiplier).round());
       provider.addStar();
-      provider.voiceFeedback.playPraise();
       setState(() { _correct.add(letter); _nextExpected++; _wrongLetter = null; });
+      await Future.delayed(const Duration(milliseconds: 700));
       await provider.speak(letter);
 
       if (_finished) {
@@ -104,12 +104,13 @@ class _AlphabetOrderScreenState extends State<AlphabetOrderScreen>
         }
       }
     } else {
+      // Play wrong.mp3 tone — dedicated player, fires instantly and clearly
       provider.audio.playWrong();
-      provider.voiceFeedback.playWrongAlphabet();
       setState(() => _wrongLetter = letter);
       _shakeCtrl.forward(from: 0);
+      await Future.delayed(const Duration(milliseconds: 700));
       await provider.speak('Try ${_letters[_nextExpected]}! Find it in order!');
-      await Future.delayed(const Duration(milliseconds: 800));
+      await Future.delayed(const Duration(milliseconds: 600));
       if (mounted) setState(() => _wrongLetter = null);
     }
   }
@@ -279,11 +280,7 @@ class _AlphabetOrderScreenState extends State<AlphabetOrderScreen>
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
-                        // Easy: show the next letter as a guide
-                        // Medium/Hard: no hint — child must rely on own knowledge
-                        widget.difficulty == Difficulty.easy
-                            ? 'Tap A → Z in order!  Next: ${_nextExpected < _totalLetters ? _letters[_nextExpected] : "🎉 Done!"}'
-                            : 'Tap the letters in A → Z order!',
+                        'Tap the letters in A → Z order!',
                         style: GoogleFonts.nunito(
                             fontSize: 12,
                             fontWeight: FontWeight.w900,
@@ -361,12 +358,7 @@ class _AlphabetOrderScreenState extends State<AlphabetOrderScreen>
   Widget _buildTile(String letter) {
     final isDone = _correct.contains(letter);
     final isWrong = _wrongLetter == letter;
-    // Only highlight the next letter on Easy — Medium/Hard must figure it out
-    final isNext = widget.difficulty == Difficulty.easy &&
-        !isDone &&
-        _nextExpected < _totalLetters &&
-        letter == _letters[_nextExpected];
-
+    // No hint highlight on any difficulty — child must rely on own knowledge
     // colours
     Color borderColor;
     Color bgColor;
@@ -380,11 +372,6 @@ class _AlphabetOrderScreenState extends State<AlphabetOrderScreen>
       borderColor = AppColors.wrong;
       bgColor = AppColors.wrong.withOpacity(0.14);
       textColor = AppColors.wrong;
-    } else if (isNext) {
-      // Subtle pulse hint for the next correct letter
-      borderColor = AppColors.gold;
-      bgColor = AppColors.gold.withOpacity(0.1);
-      textColor = AppColors.gold;
     } else {
       borderColor = Colors.white.withOpacity(0.1);
       bgColor = Colors.white.withOpacity(0.05);
@@ -403,18 +390,16 @@ class _AlphabetOrderScreenState extends State<AlphabetOrderScreen>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (isDone)
-              const Text('✅', style: TextStyle(fontSize: 22))
-            else
-              Text(letter,
-                  style: GoogleFonts.fredoka(
-                      fontSize: 28, color: textColor)),
-            if (!isDone)
-              Text(letter.toLowerCase(),
-                  style: GoogleFonts.nunito(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w800,
-                      color: textColor.withOpacity(0.6))),
+            // Always show the letter — teal when done, so child can see
+            // which letters have been tapped and track their progress
+            Text(letter,
+                style: GoogleFonts.fredoka(
+                    fontSize: 28, color: textColor)),
+            Text(letter.toLowerCase(),
+                style: GoogleFonts.nunito(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w800,
+                    color: textColor.withOpacity(0.6))),
           ],
         ),
       ),

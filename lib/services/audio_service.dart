@@ -2,14 +2,19 @@
 import 'package:audioplayers/audioplayers.dart';
 
 /// Lightweight sound-effect service.
-/// All sounds are generated from short asset files placed in assets/audio/.
-/// If an asset is missing the call is silently ignored so the app never crashes.
+/// correct.mp3 and wrong.mp3 get their own dedicated players so they
+/// fire instantly and never get blocked by other audio.
 class AudioService {
   static final AudioService _instance = AudioService._internal();
   factory AudioService() => _instance;
   AudioService._internal();
 
+  // General SFX player (tap, win, flip)
   final AudioPlayer _player = AudioPlayer();
+
+  // Dedicated players so correct/wrong always fire immediately
+  final AudioPlayer _correctPlayer = AudioPlayer();
+  final AudioPlayer _wrongPlayer   = AudioPlayer();
 
   bool _enabled = true;
   bool get enabled => _enabled;
@@ -20,16 +25,34 @@ class AudioService {
     try {
       await _player.stop();
       await _player.play(AssetSource('audio/$assetName'));
-    } catch (_) {
-      // Asset missing or platform error — fail silently
-    }
+    } catch (_) {}
   }
 
-  Future<void> playTap()     => _play('tap.mp3');
-  Future<void> playCorrect() => _play('correct.mp3');
-  Future<void> playWrong()   => _play('wrong.mp3');
-  Future<void> playWin()     => _play('win.mp3');
-  Future<void> playFlip()    => _play('flip.mp3');
+  Future<void> playTap() => _play('tap.mp3');
+  Future<void> playWin() => _play('win.mp3');
+  Future<void> playFlip() => _play('flip.mp3');
 
-  void dispose() => _player.dispose();
+  /// Always plays immediately — dedicated player, never blocked.
+  Future<void> playCorrect() async {
+    if (!_enabled) return;
+    try {
+      await _correctPlayer.stop();
+      await _correctPlayer.play(AssetSource('audio/correct.mp3'));
+    } catch (_) {}
+  }
+
+  /// Always plays immediately — dedicated player, never blocked.
+  Future<void> playWrong() async {
+    if (!_enabled) return;
+    try {
+      await _wrongPlayer.stop();
+      await _wrongPlayer.play(AssetSource('audio/wrong.mp3'));
+    } catch (_) {}
+  }
+
+  void dispose() {
+    _player.dispose();
+    _correctPlayer.dispose();
+    _wrongPlayer.dispose();
+  }
 }

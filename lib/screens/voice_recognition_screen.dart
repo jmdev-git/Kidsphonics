@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'package:permission_handler/permission_handler.dart';
 import '../theme/app_theme.dart';
 import '../providers/app_provider.dart';
 import '../widgets/shared_widgets.dart';
@@ -48,22 +49,41 @@ class _VoiceRecognitionScreenState extends State<VoiceRecognitionScreen>
     _pulseAnim = Tween<double>(begin: 1.0, end: 1.18)
         .animate(CurvedAnimation(parent: _pulseCtrl, curve: Curves.easeInOut));
     _initSpeech();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<AppProvider>().voiceFeedback.playIntroVoice();
-    });
+    // No intro voice for Say It Right — mic is primary interaction
   }
 
   Future<void> _initSpeech() async {
-    _isAvailable = await _speech.initialize(
-      onStatus: (status) {
-        if (status == 'done' || status == 'notListening') {
-          if (mounted) setState(() => _isListening = false);
-        }
-      },
-      onError: (error) {
-        if (mounted) setState(() => _isListening = false);
-      },
-    );
+    try {
+      // Step 1: Explicitly request microphone permission first
+      final status = await Permission.microphone.request();
+
+      if (status.isDenied || status.isPermanentlyDenied) {
+        // Permission refused — mark as unavailable and show message
+        if (mounted) setState(() { _isAvailable = false; _isInitialized = true; });
+        return;
+      }
+
+      // Step 2: Permission granted — initialize speech_to_text
+      // Retry up to 2 times in case the first attempt fails on some devices
+      for (int attempt = 0; attempt < 2; attempt++) {
+        _isAvailable = await _speech.initialize(
+          onStatus: (status) {
+            if (status == 'done' || status == 'notListening') {
+              if (mounted) setState(() => _isListening = false);
+            }
+          },
+          onError: (error) {
+            if (mounted) setState(() => _isListening = false);
+          },
+        ).timeout(const Duration(seconds: 6), onTimeout: () => false);
+
+        if (_isAvailable) break;
+        // Short delay before retry
+        await Future.delayed(const Duration(milliseconds: 500));
+      }
+    } catch (_) {
+      _isAvailable = false;
+    }
     if (mounted) setState(() => _isInitialized = true);
   }
 
@@ -100,9 +120,24 @@ class _VoiceRecognitionScreenState extends State<VoiceRecognitionScreen>
     final target = _current['word']!.toLowerCase().trim();
     final heard = recognized.toLowerCase().trim();
 
-    // Accept if the target word appears anywhere in the recognized phrase
-    final isCorrect = heard.contains(target) || target.contains(heard) ||
-        _levenshtein(target, heard) <= 1;
+    // Difficulty-based matching:
+    // Easy   — loose: target appears anywhere in heard, or levenshtein ≤ 1
+    // Medium — moderate: must contain target exactly, or levenshtein ≤ 1
+    //          (removed target.contains(heard) so short heard can't match long words)
+    // Hard   — strict: exact match or levenshtein ≤ 1 only (no substring tricks)
+    bool isCorrect;
+    final lev = _levenshtein(target, heard);
+    switch (widget.difficulty) {
+      case Difficulty.easy:
+        isCorrect = heard.contains(target) || target.contains(heard) || lev <= 1;
+        break;
+      case Difficulty.medium:
+        isCorrect = heard.contains(target) || lev <= 1;
+        break;
+      case Difficulty.hard:
+        isCorrect = heard == target || lev <= 1;
+        break;
+    }
 
     setState(() {
       _isCorrect = isCorrect;
@@ -116,13 +151,10 @@ class _VoiceRecognitionScreenState extends State<VoiceRecognitionScreen>
       provider.addStar();
       provider.audio.playCorrect();
       _confettiKey.currentState?.fire();
-      provider.voiceFeedback.playPraise();
-      await provider.speak('Great job! You said ${_current['word']} correctly!');
+      // No AI voice — correct.mp3 tone is sufficient feedback
     } else {
       provider.audio.playWrong();
-      provider.voiceFeedback.playWrong();
-      await provider.speak(
-          'Good try! Listen and try again. The word is ${_current['word']}. ${_current['hint']}');
+      // No AI voice — wrong.mp3 tone + result card shows "I heard: ..." feedback
     }
   }
 
@@ -388,26 +420,91 @@ class _VoiceRecognitionScreenState extends State<VoiceRecognitionScreen>
 
                   // ── Mic button ──
                   if (!_isInitialized)
-                    Text('Starting microphone...',
-                        style: GoogleFonts.nunito(
-                            fontSize: 13, color: Colors.white54))
+                    Column(children: [
+                      Text('Starting microphone...',
+                          style: GoogleFonts.nunito(
+                              fontSize: 13, color: Colors.white54)),
+                      const SizedBox(height: 12),
+                      // Skip button so child is never stuck
+                      GestureDetector(
+                        onTap: _nextWord,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 12),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.08),
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                                color: Colors.white.withOpacity(0.2)),
+                          ),
+                          child: Text('Skip →',
+                              style: GoogleFonts.fredoka(
+                                  fontSize: 16, color: Colors.white54)),
+                        ),
+                      ),
+                    ])
                   else if (!_isAvailable)
-                    Container(
-                      padding: const EdgeInsets.all(14),
-                      decoration: BoxDecoration(
-                        color: AppColors.wrong.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: AppColors.wrong.withOpacity(0.3)),
+                    Column(children: [
+                      Container(
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          color: AppColors.wrong.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                              color: AppColors.wrong.withOpacity(0.3)),
+                        ),
+                        child: Text(
+                          '⚠️ Microphone not ready.\nTap Retry below to try again.',
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.nunito(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.wrong),
+                        ),
                       ),
-                      child: Text(
-                        '⚠️ Microphone not available.\nPlease allow microphone access in device settings.',
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.nunito(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.wrong),
+                      const SizedBox(height: 12),
+                      // Retry button — re-runs init without leaving the screen
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _isInitialized = false;
+                            _isAvailable = false;
+                          });
+                          _initSpeech();
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 28, vertical: 12),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(colors: [
+                              Color(0xFF7B1FA2),
+                              Color(0xFF4A148C)
+                            ]),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Text('🔄 Retry',
+                              style: GoogleFonts.fredoka(
+                                  fontSize: 16, color: Colors.white)),
+                        ),
                       ),
-                    )
+                      const SizedBox(height: 8),
+                      GestureDetector(
+                        onTap: _nextWord,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 10),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.06),
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                                color: Colors.white.withOpacity(0.15)),
+                          ),
+                          child: Text('Skip →',
+                              style: GoogleFonts.fredoka(
+                                  fontSize: 15, color: Colors.white38)),
+                        ),
+                      ),
+                    ])
                   else
                     Column(children: [
                       // Pulsing mic
@@ -466,6 +563,29 @@ class _VoiceRecognitionScreenState extends State<VoiceRecognitionScreen>
                                 ? const Color(0xFFE91E63)
                                 : Colors.white70),
                       ),
+                      const SizedBox(height: 12),
+                      // Skip button — always visible so child is never stuck
+                      if (!_isListening)
+                        GestureDetector(
+                          onTap: _nextWord,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 10),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.06),
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                  color: Colors.white.withOpacity(0.15)),
+                            ),
+                            child: Text(
+                              _wordIndex < _words.length - 1
+                                  ? 'Skip →'
+                                  : 'Skip to Results →',
+                              style: GoogleFonts.fredoka(
+                                  fontSize: 15, color: Colors.white38),
+                            ),
+                          ),
+                        ),
                     ]),
                   const SizedBox(height: 16),
 

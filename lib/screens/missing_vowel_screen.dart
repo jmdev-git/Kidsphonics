@@ -35,27 +35,29 @@ class _VowelPuzzle {
 }
 
 const _easyPuzzles = [
-  _VowelPuzzle(emoji: '🐱', word: 'CAT',  display: 'C _ T', vowel: 'A', hint: 'C... A... T. Cat!'),
-  _VowelPuzzle(emoji: '🐶', word: 'DOG',  display: 'D _ G', vowel: 'O', hint: 'D... O... G. Dog!'),
-  _VowelPuzzle(emoji: '🥚', word: 'EGG',  display: '_ G G', vowel: 'E', hint: 'E... G... G. Egg!'),
+  _VowelPuzzle(emoji: '🐱', word: 'CAT', display: 'C _ T', vowel: 'A', hint: 'C... A... T. Cat!'),
+  _VowelPuzzle(emoji: '🥚', word: 'EGG', display: '_ G G', vowel: 'E', hint: 'E... G... G. Egg!'),
+  _VowelPuzzle(emoji: '🐟', word: 'FIN', display: 'F _ N', vowel: 'I', hint: 'F... I... N. Fin!'),
 ];
 
+// Medium — completely different words from Easy, all vowels in A/E/I/O/U set
 const _mediumPuzzles = [
-  _VowelPuzzle(emoji: '🐱', word: 'CAT',  display: 'C _ T', vowel: 'A', hint: 'C... A... T. Cat!'),
-  _VowelPuzzle(emoji: '🐶', word: 'DOG',  display: 'D _ G', vowel: 'O', hint: 'D... O... G. Dog!'),
-  _VowelPuzzle(emoji: '☀️', word: 'SUN',  display: 'S _ N', vowel: 'U', hint: 'S... U... N. Sun!'),
-  _VowelPuzzle(emoji: '🥚', word: 'EGG',  display: '_ G G', vowel: 'E', hint: 'E... G... G. Egg!'),
   _VowelPuzzle(emoji: '🐷', word: 'PIG',  display: 'P _ G', vowel: 'I', hint: 'P... I... G. Pig!'),
+  _VowelPuzzle(emoji: '☀️', word: 'SUN',  display: 'S _ N', vowel: 'U', hint: 'S... U... N. Sun!'),
+  _VowelPuzzle(emoji: '🐝', word: 'BEE',  display: 'B _ E', vowel: 'E', hint: 'B... E... E. Bee!'),
+  _VowelPuzzle(emoji: '🐗', word: 'HOG',  display: 'H _ G', vowel: 'O', hint: 'H... O... G. Hog!'),
+  _VowelPuzzle(emoji: '🦁', word: 'CUB',  display: 'C _ B', vowel: 'U', hint: 'C... U... B. Cub!'),
 ];
 
+// Hard — completely different words from Easy and Medium
 const _hardPuzzles = [
-  _VowelPuzzle(emoji: '🐱', word: 'CAT',  display: 'C _ T', vowel: 'A', hint: 'C... A... T. Cat!'),
-  _VowelPuzzle(emoji: '🐶', word: 'DOG',  display: 'D _ G', vowel: 'O', hint: 'D... O... G. Dog!'),
-  _VowelPuzzle(emoji: '☀️', word: 'SUN',  display: 'S _ N', vowel: 'U', hint: 'S... U... N. Sun!'),
-  _VowelPuzzle(emoji: '🥚', word: 'EGG',  display: '_ G G', vowel: 'E', hint: 'E... G... G. Egg!'),
-  _VowelPuzzle(emoji: '🐷', word: 'PIG',  display: 'P _ G', vowel: 'I', hint: 'P... I... G. Pig!'),
-  _VowelPuzzle(emoji: '🦁', word: 'CUB',  display: 'C _ B', vowel: 'U', hint: 'C... U... B. Cub!'),
-  _VowelPuzzle(emoji: '🐝', word: 'BEE',  display: 'B _ E', vowel: 'E', hint: 'B... E... E. Bee!'),
+  _VowelPuzzle(emoji: '🐟', word: 'FIN',  display: 'F _ N', vowel: 'I', hint: 'F... I... N. Fin!'),
+  _VowelPuzzle(emoji: '🌰', word: 'NUT',  display: 'N _ T', vowel: 'U', hint: 'N... U... T. Nut!'),
+  _VowelPuzzle(emoji: '🧹', word: 'MOP',  display: 'M _ P', vowel: 'O', hint: 'M... O... P. Mop!'),
+  _VowelPuzzle(emoji: '🐭', word: 'RAT',  display: 'R _ T', vowel: 'A', hint: 'R... A... T. Rat!'),
+  _VowelPuzzle(emoji: '🦍', word: 'APE',  display: '_ P E', vowel: 'A', hint: 'A... P... E. Ape!'),
+  _VowelPuzzle(emoji: '💋', word: 'LIP',  display: 'L _ P', vowel: 'I', hint: 'L... I... P. Lip!'),
+  _VowelPuzzle(emoji: '🌿', word: 'OAK',  display: '_ A K', vowel: 'O', hint: 'O... A... K. Oak!'),
 ];
 
 List<_VowelPuzzle> _puzzlesFor(Difficulty d) {
@@ -66,17 +68,21 @@ List<_VowelPuzzle> _puzzlesFor(Difficulty d) {
   }
 }
 
-List<String> _vowelsFor(Difficulty d) {
-  // Always include all 5 vowels — difficulty affects how many EXTRA
-  // distractors are shown, but the correct vowel must always be present.
-  // Easy: show only the 3 vowels most relevant to the puzzle (always includes correct)
-  // Medium: 4 vowels
-  // Hard: all 5 vowels
+List<String> _vowelsFor(Difficulty d, String correctVowel) {
+  // Build the vowel set for this difficulty, always ensuring
+  // the correct answer is present — swap out last distractor if needed.
+  List<String> base;
   switch (d) {
-    case Difficulty.easy:   return ['A', 'E', 'I', 'O', 'U']; // show all, keep it simple
-    case Difficulty.medium: return ['A', 'E', 'I', 'O', 'U'];
-    case Difficulty.hard:   return ['A', 'E', 'I', 'O', 'U'];
+    case Difficulty.easy:   base = ['A', 'E', 'I']; break;
+    case Difficulty.medium: base = ['A', 'E', 'I', 'O']; break;
+    case Difficulty.hard:   base = ['A', 'E', 'I', 'O', 'U']; break;
   }
+  // If correct vowel is already in set, return as-is
+  if (base.contains(correctVowel)) return base;
+  // Otherwise replace the last element with the correct vowel
+  final result = List<String>.from(base);
+  result[result.length - 1] = correctVowel;
+  return result;
 }
 
 // ── Screen ────────────────────────────────────────────────────────────────
@@ -101,7 +107,7 @@ class _MissingVowelScreenState extends State<MissingVowelScreen>
   late Animation<double> _bounceAnim;
 
   List<_VowelPuzzle> get _puzzles => _puzzlesFor(widget.difficulty);
-  List<String> get _vowels => _vowelsFor(widget.difficulty);
+  List<String> get _vowels => _vowelsFor(widget.difficulty, _puzzle.vowel);
   _VowelPuzzle get _puzzle => _puzzles[_index];
 
   @override
@@ -122,20 +128,25 @@ class _MissingVowelScreenState extends State<MissingVowelScreen>
   void _pick(String vowel) async {
     if (_answered) return;
     final isCorrect = vowel == _puzzle.vowel;
-    setState(() { _picked = vowel; _answered = true; if (isCorrect) _correct++; });
+    setState(() { _picked = vowel; });
 
     final provider = context.read<AppProvider>();
     if (isCorrect) {
+      setState(() { _answered = true; _correct++; });
+      // Play correct.mp3 tone first
       provider.audio.playCorrect();
       _confettiKey.currentState?.fire();
       provider.addXP((8 * widget.difficulty.xpMultiplier).round());
       provider.addStar();
-      provider.voiceFeedback.playPraise();
+      await Future.delayed(const Duration(milliseconds: 700));
       await provider.speak('${_puzzle.word}! The missing vowel is ${_puzzle.vowel}!');
     } else {
+      // Play wrong.mp3 tone first
       provider.audio.playWrong();
-      provider.voiceFeedback.playWrongQuiz();
-      await provider.speak('Not quite! The missing vowel is ${_puzzle.vowel}! ${_puzzle.hint}');
+      await Future.delayed(const Duration(milliseconds: 700));
+      await provider.speak('Try again! Listen carefully!');
+      await Future.delayed(const Duration(milliseconds: 600));
+      if (mounted) setState(() => _picked = null);
     }
   }
 
@@ -272,18 +283,20 @@ class _MissingVowelScreenState extends State<MissingVowelScreen>
                       Row(mainAxisAlignment: MainAxisAlignment.center,
                         children: _puzzle.display.split('').map((ch) {
                           if (ch == '_') {
-                            // Show picked vowel or blank
-                            final fill = _answered ? _puzzle.vowel : (_picked ?? '?');
-                            final color = _answered && _picked != null
-                                ? (_picked == _puzzle.vowel ? AppColors.teal : AppColors.wrong)
-                                : AppColors.gold;
+                            // Show picked vowel in blank; teal if correct, red if wrong pick
+                            final fill = _answered ? _puzzle.vowel : (_picked ?? '');
+                            final color = _answered
+                                ? AppColors.teal
+                                : (_picked != null && _picked != _puzzle.vowel)
+                                    ? AppColors.wrong
+                                    : AppColors.gold;
                             return Container(
                               width: 48, height: 58,
                               margin: const EdgeInsets.symmetric(horizontal: 4),
                               decoration: BoxDecoration(
                                 border: Border(bottom: BorderSide(color: color, width: 3.5)),
                               ),
-                              child: Center(child: Text(_answered ? fill : (_picked ?? ''),
+                              child: Center(child: Text(fill,
                                   style: GoogleFonts.fredoka(fontSize: 32, color: color))),
                             );
                           } else if (ch == ' ') {
@@ -301,7 +314,7 @@ class _MissingVowelScreenState extends State<MissingVowelScreen>
                           style: GoogleFonts.nunito(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.white60)),
                       const SizedBox(height: 10),
                       GestureDetector(
-                        onTap: () => provider.speak(_puzzle.word[0].toUpperCase() + _puzzle.word.substring(1).toLowerCase()),
+                        onTap: () => provider.speakHint(_puzzle.word[0].toUpperCase() + _puzzle.word.substring(1).toLowerCase()),
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
                           decoration: BoxDecoration(
@@ -322,29 +335,42 @@ class _MissingVowelScreenState extends State<MissingVowelScreen>
                           color: const Color(0xFF9B1FD6), letterSpacing: 1.2)),
                   const SizedBox(height: 14),
 
-                  // ── Vowel buttons ──
-                  Row(mainAxisAlignment: MainAxisAlignment.center,
+                  // ── Vowel buttons — Wrap so it never overflows ──
+                  Wrap(
+                    alignment: WrapAlignment.center,
+                    spacing: 10,
+                    runSpacing: 10,
                     children: _vowels.map((v) {
                       final isCorrect = v == _puzzle.vowel;
-                      final isPicked = _picked == v;
                       Color bg = accent.withOpacity(0.3);
                       Color border = const Color(0xFF7B1FA2);
                       Color text = Colors.white;
-                      if (_answered && isCorrect) { bg = AppColors.teal.withOpacity(0.2); border = AppColors.teal; text = AppColors.teal; }
-                      else if (_answered && isPicked && !isCorrect) { bg = AppColors.wrong.withOpacity(0.15); border = AppColors.wrong; text = AppColors.wrong; }
+                      if (_answered && isCorrect) {
+                        bg = AppColors.teal.withOpacity(0.2);
+                        border = AppColors.teal;
+                        text = AppColors.teal;
+                      } else if (!_answered && _picked == v && !isCorrect) {
+                        bg = AppColors.wrong.withOpacity(0.15);
+                        border = AppColors.wrong;
+                        text = AppColors.wrong;
+                      }
 
                       return GestureDetector(
                         onTap: _answered ? null : () => _pick(v),
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 180),
-                          width: 56, height: 56,
-                          margin: const EdgeInsets.symmetric(horizontal: 6),
+                          width: 58,
+                          height: 58,
                           decoration: BoxDecoration(
-                            color: bg, shape: BoxShape.circle,
+                            color: bg,
+                            shape: BoxShape.circle,
                             border: Border.all(color: border, width: 2.5),
                           ),
-                          child: Center(child: Text(v,
-                              style: GoogleFonts.fredoka(fontSize: 24, color: text))),
+                          child: Center(
+                            child: Text(v,
+                                style: GoogleFonts.fredoka(
+                                    fontSize: 24, color: text)),
+                          ),
                         ),
                       );
                     }).toList(),

@@ -55,7 +55,7 @@ const _hardRounds = [
   _PicWordRound(word: 'ZEBRA',    correctEmoji: '🦓', options: ['🦓','🐶','🌈','🪁','🥚'],    labels: ['Zebra','Dog','Rainbow','Kite','Egg'],   hint: 'Zebra! Z-E-B-R-A!'),
   _PicWordRound(word: 'VIOLIN',   correctEmoji: '🎻', options: ['🎻','🏠','☀️','🐷','🌙'],    labels: ['Violin','House','Sun','Pig','Moon'],    hint: 'Violin! V-I-O-L-I-N!'),
   _PicWordRound(word: 'OCTOPUS',  correctEmoji: '🐙', options: ['🐙','🦁','🍌','☂️','🦓'],    labels: ['Octopus','Lion','Banana','Umbrella','Zebra'], hint: 'Octopus! O-C-T-O-P-U-S!'),
-  _PicWordRound(word: 'XYLOPHONE',correctEmoji: '🎶', options: ['🎶','🐙','🦓','🎻','☂️'],    labels: ['Xylophone','Octopus','Zebra','Violin','Umbrella'], hint: 'Xylophone! X-Y-L-O-P-H-O-N-E!'),
+  _PicWordRound(word: 'XSIGN',    correctEmoji: '❌', options: ['❌','🐙','🦓','🎻','☂️'],    labels: ['X-Sign','Octopus','Zebra','Violin','Umbrella'], hint: 'X-Sign! X-S-I-G-N!'),
 ];
 
 List<_PicWordRound> _roundsFor(Difficulty d) {
@@ -113,20 +113,21 @@ class _PictureWordMatchScreenState extends State<PictureWordMatchScreen>
   void _pick(String emoji) async {
     if (_answered) return;
     final isCorrect = emoji == _round.correctEmoji;
-    setState(() { _picked = emoji; _answered = true; if (isCorrect) _correct++; });
+    setState(() => _picked = emoji);
 
     final provider = context.read<AppProvider>();
     if (isCorrect) {
+      setState(() { _answered = true; _correct++; });
       provider.audio.playCorrect();
       _confettiKey.currentState?.fire();
       provider.addXP((8 * widget.difficulty.xpMultiplier).round());
       provider.addStar();
-      provider.voiceFeedback.playPraise();
-      await provider.speak('${_round.word}! That is right!');
+      // No competing voice — correct.mp3 plays cleanly
     } else {
+      // Wrong — play wrong.mp3 tone, show red flash, then clear so child can retry
       provider.audio.playWrong();
-      provider.voiceFeedback.playWrongQuiz();
-      await provider.speak('Not quite! The picture for ${_round.word} is ${_round.hint}');
+      await Future.delayed(const Duration(milliseconds: 900));
+      if (mounted) setState(() => _picked = null);
     }
   }
 
@@ -261,7 +262,7 @@ class _PictureWordMatchScreenState extends State<PictureWordMatchScreen>
                           style: GoogleFonts.nunito(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.white60)),
                       const SizedBox(height: 10),
                       GestureDetector(
-                        onTap: () => provider.speak(_round.word[0].toUpperCase() + _round.word.substring(1).toLowerCase()),
+                        onTap: () => provider.speakHint(_round.word[0].toUpperCase() + _round.word.substring(1).toLowerCase()),
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
                           decoration: BoxDecoration(
@@ -298,7 +299,7 @@ class _PictureWordMatchScreenState extends State<PictureWordMatchScreen>
                       Color border = Colors.white.withOpacity(0.12);
                       Color bg = Colors.white.withOpacity(0.06);
                       if (_answered && isCorrect) { border = AppColors.teal; bg = AppColors.teal.withOpacity(0.12); }
-                      else if (_answered && isPicked && !isCorrect) { border = AppColors.wrong; bg = AppColors.wrong.withOpacity(0.1); }
+                      else if (!_answered && _picked == emoji && !isCorrect) { border = AppColors.wrong; bg = AppColors.wrong.withOpacity(0.1); }
 
                       return GestureDetector(
                         onTap: _answered ? null : () => _pick(emoji),
@@ -310,7 +311,7 @@ class _PictureWordMatchScreenState extends State<PictureWordMatchScreen>
                           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                             Text(emoji, style: const TextStyle(fontSize: 44)),
                             if (_answered && isCorrect) const Text('✅', style: TextStyle(fontSize: 16)),
-                            if (_answered && isPicked && !isCorrect) const Text('❌', style: TextStyle(fontSize: 16)),
+                            if (!_answered && _picked == emoji && !isCorrect) const Text('❌', style: TextStyle(fontSize: 16)),
                           ]),
                         ),
                       );

@@ -115,18 +115,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 Text('Grade 1 · Learn · Play · Level Up',
                                     style: GoogleFonts.nunito(fontSize: 10, fontWeight: FontWeight.w900,
                                         color: const Color(0xFF9B6FC4), letterSpacing: 2)),
-                                const SizedBox(height: 4),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.teal.withOpacity(0.12),
-                                    borderRadius: BorderRadius.circular(20),
-                                    border: Border.all(color: AppColors.teal.withOpacity(0.3)),
-                                  ),
-                                  child: Text('Salapingao Elementary School',
-                                      style: GoogleFonts.nunito(fontSize: 9, fontWeight: FontWeight.w900,
-                                          color: AppColors.teal, letterSpacing: 1)),
-                                ),
+
                               ],
                             ),
                           ),

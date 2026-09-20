@@ -70,89 +70,89 @@ const _easyRounds = [
   ),
 ];
 
-// Medium — 4 options, slightly more words
+// Medium — 4 options, completely different words from Easy
 const _mediumRounds = [
-  _RhymeRound(
-    emoji: '🐱', word: 'CAT',
-    correctRhyme: 'BAT',
-    options: [_RhymeOption('BAT','🦇'), _RhymeOption('DOG','🐶'), _RhymeOption('SUN','☀️'), _RhymeOption('PIG','🐷')],
-    hint: 'Cat... Bat! Both end in A-T!',
-  ),
   _RhymeRound(
     emoji: '🎩', word: 'HAT',
     correctRhyme: 'MAT',
-    options: [_RhymeOption('PIG','🐷'), _RhymeOption('MAT','🟫'), _RhymeOption('MOON','🌙'), _RhymeOption('FISH','🐟')],
+    options: [_RhymeOption('MAT','🟫'), _RhymeOption('DOG','🐶'), _RhymeOption('MOON','🌙'), _RhymeOption('FISH','🐟')],
     hint: 'Hat... Mat! Both end in A-T!',
-  ),
-  _RhymeRound(
-    emoji: '🌙', word: 'MOON',
-    correctRhyme: 'SPOON',
-    options: [_RhymeOption('FISH','🐟'), _RhymeOption('SPOON','🥄'), _RhymeOption('APPLE','🍎'), _RhymeOption('DOG','🐶')],
-    hint: 'Moon... Spoon! Both end in O-O-N!',
-  ),
-  _RhymeRound(
-    emoji: '🐷', word: 'PIG',
-    correctRhyme: 'BIG',
-    options: [_RhymeOption('BIG','🏔️'), _RhymeOption('TREE','🌳'), _RhymeOption('SPOON','🥄'), _RhymeOption('HAT','🎩')],
-    hint: 'Pig... Big! Both end in I-G!',
   ),
   _RhymeRound(
     emoji: '🐛', word: 'BUG',
     correctRhyme: 'MUG',
-    options: [_RhymeOption('DOG','🐶'), _RhymeOption('CAT','🐱'), _RhymeOption('MUG','☕'), _RhymeOption('SUN','☀️')],
+    options: [_RhymeOption('MUG','☕'), _RhymeOption('FISH','🐟'), _RhymeOption('HAT','🎩'), _RhymeOption('SUN','☀️')],
     hint: 'Bug... Mug! Both end in U-G!',
   ),
   _RhymeRound(
-    emoji: '🐝', word: 'BEE',
-    correctRhyme: 'TREE',
-    options: [_RhymeOption('TREE','🌳'), _RhymeOption('CAT','🐱'), _RhymeOption('HAT','🎩'), _RhymeOption('BUG','🐛')],
-    hint: 'Bee... Tree! Both end in E-E!',
-  ),
-];
-
-// Hard — 5 options, trickier + more distractors
-const _hardRounds = [
-  _RhymeRound(
-    emoji: '🐱', word: 'CAT',
-    correctRhyme: 'FLAT',
-    options: [_RhymeOption('FLAT','🏠'), _RhymeOption('DOG','🐶'), _RhymeOption('SUN','☀️'), _RhymeOption('PIG','🐷'), _RhymeOption('MOON','🌙')],
-    hint: 'Cat... Flat! Both end in A-T!',
+    emoji: '🏀', word: 'BALL',
+    correctRhyme: 'WALL',
+    options: [_RhymeOption('WALL','🧱'), _RhymeOption('BUG','🐛'), _RhymeOption('HAT','🎩'), _RhymeOption('FISH','🐟')],
+    hint: 'Ball... Wall! Both end in A-L-L!',
   ),
   _RhymeRound(
-    emoji: '🌙', word: 'MOON',
-    correctRhyme: 'BALLOON',
-    options: [_RhymeOption('FISH','🐟'), _RhymeOption('BALLOON','🎈'), _RhymeOption('APPLE','🍎'), _RhymeOption('DOG','🐶'), _RhymeOption('HAT','🎩')],
-    hint: 'Moon... Balloon! Both end in O-O-N!',
+    emoji: '🐸', word: 'FROG',
+    correctRhyme: 'LOG',
+    options: [_RhymeOption('LOG','🪵'), _RhymeOption('BALL','🏀'), _RhymeOption('MUG','☕'), _RhymeOption('HAT','🎩')],
+    hint: 'Frog... Log! Both end in O-G!',
   ),
   _RhymeRound(
     emoji: '🌟', word: 'STAR',
     correctRhyme: 'CAR',
-    options: [_RhymeOption('CAR','🚗'), _RhymeOption('FISH','🐟'), _RhymeOption('BEE','🐝'), _RhymeOption('HAT','🎩'), _RhymeOption('MUG','☕')],
+    options: [_RhymeOption('CAR','🚗'), _RhymeOption('FROG','🐸'), _RhymeOption('BALL','🏀'), _RhymeOption('BUG','🐛')],
+    hint: 'Star... Car! Both end in A-R!',
+  ),
+  _RhymeRound(
+    emoji: '🎂', word: 'CAKE',
+    correctRhyme: 'LAKE',
+    options: [_RhymeOption('LAKE','🏞️'), _RhymeOption('STAR','🌟'), _RhymeOption('LOG','🪵'), _RhymeOption('MUG','☕')],
+    hint: 'Cake... Lake! Both end in A-K-E!',
+  ),
+];
+
+// Hard — 5 options, completely different words from Easy and Medium
+const _hardRounds = [
+  _RhymeRound(
+    emoji: '🏠', word: 'HOUSE',
+    correctRhyme: 'MOUSE',
+    options: [_RhymeOption('MOUSE','🐭'), _RhymeOption('CAR','🚗'), _RhymeOption('LOG','🪵'), _RhymeOption('STAR','🌟'), _RhymeOption('CAKE','🎂')],
+    hint: 'House... Mouse! Both end in O-U-S-E!',
+  ),
+  _RhymeRound(
+    emoji: '🦊', word: 'FOX',
+    correctRhyme: 'BOX',
+    options: [_RhymeOption('BOX','📦'), _RhymeOption('MOUSE','🐭'), _RhymeOption('HOUSE','🏠'), _RhymeOption('STAR','🌟'), _RhymeOption('LOG','🪵')],
+    hint: 'Fox... Box! Both end in O-X!',
+  ),
+  _RhymeRound(
+    emoji: '🎈', word: 'BALLOON',
+    correctRhyme: 'SPOON',
+    options: [_RhymeOption('SPOON','🥄'), _RhymeOption('FOX','🦊'), _RhymeOption('BOX','📦'), _RhymeOption('HOUSE','🏠'), _RhymeOption('MOUSE','🐭')],
+    hint: 'Balloon... Spoon! Both end in O-O-N!',
+  ),
+  _RhymeRound(
+    emoji: '🌳', word: 'TREE',
+    correctRhyme: 'SEA',
+    options: [_RhymeOption('SEA','🌊'), _RhymeOption('FOX','🦊'), _RhymeOption('SPOON','🥄'), _RhymeOption('BOX','📦'), _RhymeOption('MOUSE','🐭')],
+    hint: 'Tree... Sea! Both end in E-E!',
+  ),
+  _RhymeRound(
+    emoji: '🐍', word: 'SNAKE',
+    correctRhyme: 'CAKE',
+    options: [_RhymeOption('CAKE','🎂'), _RhymeOption('TREE','🌳'), _RhymeOption('SEA','🌊'), _RhymeOption('FOX','🦊'), _RhymeOption('SPOON','🥄')],
+    hint: 'Snake... Cake! Both end in A-K-E!',
+  ),
+  _RhymeRound(
+    emoji: '⭐', word: 'STAR',
+    correctRhyme: 'CAR',
+    options: [_RhymeOption('CAR','🚗'), _RhymeOption('SNAKE','🐍'), _RhymeOption('CAKE','🎂'), _RhymeOption('SEA','🌊'), _RhymeOption('TREE','🌳')],
     hint: 'Star... Car! Both end in A-R!',
   ),
   _RhymeRound(
     emoji: '🐸', word: 'FROG',
     correctRhyme: 'LOG',
-    options: [_RhymeOption('LOG','🪵'), _RhymeOption('CAT','🐱'), _RhymeOption('MOON','🌙'), _RhymeOption('BEE','🐝'), _RhymeOption('STAR','🌟')],
+    options: [_RhymeOption('LOG','🪵'), _RhymeOption('CAR','🚗'), _RhymeOption('STAR','⭐'), _RhymeOption('CAKE','🎂'), _RhymeOption('SNAKE','🐍')],
     hint: 'Frog... Log! Both end in O-G!',
-  ),
-  _RhymeRound(
-    emoji: '🏠', word: 'HOUSE',
-    correctRhyme: 'MOUSE',
-    options: [_RhymeOption('MOUSE','🐭'), _RhymeOption('CAR','🚗'), _RhymeOption('FROG','🐸'), _RhymeOption('LOG','🪵'), _RhymeOption('STAR','🌟')],
-    hint: 'House... Mouse! Both end in O-U-S-E!',
-  ),
-  _RhymeRound(
-    emoji: '🎂', word: 'CAKE',
-    correctRhyme: 'LAKE',
-    options: [_RhymeOption('LAKE','🏞️'), _RhymeOption('FROG','🐸'), _RhymeOption('MOUSE','🐭'), _RhymeOption('BUG','🐛'), _RhymeOption('HAT','🎩')],
-    hint: 'Cake... Lake! Both end in A-K-E!',
-  ),
-  _RhymeRound(
-    emoji: '🦊', word: 'FOX',
-    correctRhyme: 'BOX',
-    options: [_RhymeOption('BOX','📦'), _RhymeOption('CAKE','🎂'), _RhymeOption('LAKE','🏞️'), _RhymeOption('MOUSE','🐭'), _RhymeOption('CAR','🚗')],
-    hint: 'Fox... Box! Both end in O-X!',
   ),
 ];
 
@@ -438,7 +438,8 @@ class _RhymingWordsScreenState extends State<RhymingWordsScreen>
                       const SizedBox(height: 12),
                       GestureDetector(
                         onTap: () => provider.speak(
-                            '${_round.word}. ${_round.hint}'),
+                            _round.word[0].toUpperCase() +
+                            _round.word.substring(1).toLowerCase()),
                         child: Container(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 18, vertical: 8),

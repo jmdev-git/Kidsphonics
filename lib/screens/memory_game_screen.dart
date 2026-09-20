@@ -32,6 +32,7 @@ class MemoryGameScreen extends StatefulWidget {
 class _MemoryGameScreenState extends State<MemoryGameScreen> {
   late List<_MemCard> _cards;
   List<_MemCard> _flipped = [];
+  Set<String> _wrongCardIds = {}; // tracks cards showing red flash
   int _matchCount = 0;
   bool _locked = false;
   final _confettiKey = GlobalKey<ConfettiOverlayState>();
@@ -57,6 +58,7 @@ class _MemoryGameScreenState extends State<MemoryGameScreen> {
     setState(() {
       _cards = cards;
       _flipped = [];
+      _wrongCardIds = {};
       _matchCount = 0;
       _locked = false;
     });
@@ -81,8 +83,6 @@ class _MemoryGameScreenState extends State<MemoryGameScreen> {
         a.isMatched = true; b.isMatched = true;
         _matchCount++;
         provider.audio.playCorrect();
-        provider.voiceFeedback.playPraise();
-        provider.speak('Great match! ${a.id} goes with the picture!');
         provider.addXP((5 * widget.difficulty.xpMultiplier).round());
         provider.addStar();
         if (_matchCount == _totalPairs) {
@@ -93,12 +93,27 @@ class _MemoryGameScreenState extends State<MemoryGameScreen> {
           await Future.delayed(const Duration(milliseconds: 400));
           if (mounted) _showWinDialog();
         }
+        setState(() { _flipped = []; _locked = false; });
       } else {
+        // Show red flash on mismatched cards — wrong.mp3 only, no voice
         provider.audio.playWrong();
-        provider.voiceFeedback.playWrongMemory();
-        a.isFlipped = false; b.isFlipped = false;
+        final wrongA = a.id + a.type.name;
+        final wrongB = b.id + b.type.name;
+        setState(() {
+          _wrongCardIds = {wrongA, wrongB};
+        });
+        // Hold red flash for 800ms then flip back
+        await Future.delayed(const Duration(milliseconds: 800));
+        if (mounted) {
+          a.isFlipped = false;
+          b.isFlipped = false;
+          setState(() {
+            _wrongCardIds = {};
+            _flipped = [];
+            _locked = false;
+          });
+        }
       }
-      setState(() { _flipped = []; _locked = false; });
     }
   }
 
@@ -249,6 +264,9 @@ class _MemoryGameScreenState extends State<MemoryGameScreen> {
   }
 
   Widget _buildCard(_MemCard card) {
+    final cardKey = card.id + card.type.name;
+    final isWrong = _wrongCardIds.contains(cardKey);
+
     return GestureDetector(
       onTap: () => _tapCard(card),
       child: AnimatedContainer(
@@ -256,19 +274,29 @@ class _MemoryGameScreenState extends State<MemoryGameScreen> {
         decoration: BoxDecoration(
           gradient: card.isMatched
               ? const LinearGradient(colors: [AppColors.teal, AppColors.tealDark])
+              : isWrong
+              ? LinearGradient(colors: [AppColors.wrong, AppColors.wrong.withOpacity(0.7)])
               : card.isFlipped
               ? null
               : const LinearGradient(colors: [AppColors.blue, AppColors.blueDark]),
-          color: card.isFlipped && !card.isMatched ? Colors.white : null,
+          color: (card.isFlipped && !card.isMatched && !isWrong) ? Colors.white : null,
           borderRadius: BorderRadius.circular(15),
           border: Border.all(
-            color: card.isMatched ? const Color(0xFF00E5C4)
-                : card.isFlipped ? const Color(0xFF90CAF9)
+            color: card.isMatched
+                ? const Color(0xFF00E5C4)
+                : isWrong
+                ? AppColors.wrong
+                : card.isFlipped
+                ? const Color(0xFF90CAF9)
                 : const Color(0xFF1976D2),
             width: 2,
           ),
           boxShadow: card.isFlipped ? [BoxShadow(
-            color: (card.isMatched ? AppColors.teal : AppColors.blue).withOpacity(0.4),
+            color: (card.isMatched
+                ? AppColors.teal
+                : isWrong
+                ? AppColors.wrong
+                : AppColors.blue).withOpacity(0.4),
             blurRadius: 8)] : [],
         ),
         child: Center(
@@ -276,17 +304,29 @@ class _MemoryGameScreenState extends State<MemoryGameScreen> {
               ? Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                   if (card.type == _CardType.letter)
                     Text(card.display,
-                        style: GoogleFonts.fredoka(fontSize: 26,
-                            color: card.isMatched ? Colors.white : AppColors.blue))
+                        style: GoogleFonts.fredoka(
+                            fontSize: 26,
+                            color: card.isMatched
+                                ? Colors.white
+                                : isWrong
+                                ? Colors.white
+                                : AppColors.blue))
                   else ...[
                     Text(card.display, style: const TextStyle(fontSize: 26)),
                     Text(card.id,
-                        style: GoogleFonts.nunito(fontSize: 11, fontWeight: FontWeight.w900,
-                            color: card.isMatched ? Colors.white : AppColors.blue)),
+                        style: GoogleFonts.nunito(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w900,
+                            color: card.isMatched
+                                ? Colors.white
+                                : isWrong
+                                ? Colors.white
+                                : AppColors.blue)),
                   ],
                 ])
               : Text('?',
-                  style: GoogleFonts.fredoka(fontSize: 24, color: Colors.white.withOpacity(0.4))),
+                  style: GoogleFonts.fredoka(
+                      fontSize: 24, color: Colors.white.withOpacity(0.4))),
         ),
       ),
     );

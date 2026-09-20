@@ -55,30 +55,24 @@ class _SoundPosRound {
   });
 }
 
+// Easy — only BEGINNING position, 3 unique words, 2 choices (Beginning/End)
 const _easyRounds = [
-  _SoundPosRound(emoji: '🐱', word: 'CAT', targetLetter: 'C',
+  _SoundPosRound(emoji: '🍎', word: 'APPLE', targetLetter: 'A',
       correctPos: _SoundPos.beginning,
-      options: [_SoundPos.beginning, _SoundPos.middle, _SoundPos.end],
-      hint: 'C-A-T. C is the FIRST sound!'),
-  _SoundPosRound(emoji: '🐶', word: 'DOG', targetLetter: 'D',
+      options: [_SoundPos.beginning, _SoundPos.end],
+      hint: 'A-P-P-L-E. A is the FIRST sound!'),
+  _SoundPosRound(emoji: '🍌', word: 'BANANA', targetLetter: 'B',
       correctPos: _SoundPos.beginning,
-      options: [_SoundPos.beginning, _SoundPos.middle, _SoundPos.end],
-      hint: 'D-O-G. D is the FIRST sound!'),
-  _SoundPosRound(emoji: '☀️', word: 'SUN', targetLetter: 'S',
+      options: [_SoundPos.beginning, _SoundPos.end],
+      hint: 'B-A-N-A-N-A. B is the FIRST sound!'),
+  _SoundPosRound(emoji: '🥚', word: 'EGG', targetLetter: 'E',
       correctPos: _SoundPos.beginning,
-      options: [_SoundPos.beginning, _SoundPos.middle, _SoundPos.end],
-      hint: 'S-U-N. S is the FIRST sound!'),
+      options: [_SoundPos.beginning, _SoundPos.end],
+      hint: 'E-G-G. E is the FIRST sound!'),
 ];
 
+// Medium — BEGINNING + END, 5 unique words (none from Easy), 2 choices
 const _mediumRounds = [
-  _SoundPosRound(emoji: '🐱', word: 'CAT', targetLetter: 'C',
-      correctPos: _SoundPos.beginning,
-      options: [_SoundPos.beginning, _SoundPos.end],
-      hint: 'C-A-T. C is at the BEGINNING!'),
-  _SoundPosRound(emoji: '🐱', word: 'CAT', targetLetter: 'T',
-      correctPos: _SoundPos.end,
-      options: [_SoundPos.beginning, _SoundPos.end],
-      hint: 'C-A-T. T is at the END!'),
   _SoundPosRound(emoji: '🐟', word: 'FISH', targetLetter: 'F',
       correctPos: _SoundPos.beginning,
       options: [_SoundPos.beginning, _SoundPos.end],
@@ -87,41 +81,50 @@ const _mediumRounds = [
       correctPos: _SoundPos.end,
       options: [_SoundPos.beginning, _SoundPos.end],
       hint: 'F-I-S-H. H is at the END!'),
-  _SoundPosRound(emoji: '☀️', word: 'SUN', targetLetter: 'N',
+  _SoundPosRound(emoji: '🌙', word: 'MOON', targetLetter: 'M',
+      correctPos: _SoundPos.beginning,
+      options: [_SoundPos.beginning, _SoundPos.end],
+      hint: 'M-O-O-N. M is at the BEGINNING!'),
+  _SoundPosRound(emoji: '🌙', word: 'MOON', targetLetter: 'N',
       correctPos: _SoundPos.end,
       options: [_SoundPos.beginning, _SoundPos.end],
-      hint: 'S-U-N. N is at the END!'),
+      hint: 'M-O-O-N. N is at the END!'),
+  _SoundPosRound(emoji: '🪁', word: 'KITE', targetLetter: 'K',
+      correctPos: _SoundPos.beginning,
+      options: [_SoundPos.beginning, _SoundPos.end],
+      hint: 'K-I-T-E. K is at the BEGINNING!'),
 ];
 
+// Hard — BEGINNING + MIDDLE + END, 7 unique words (none from Easy/Medium), 3 choices
 const _hardRounds = [
-  _SoundPosRound(emoji: '🐱', word: 'CAT', targetLetter: 'C',
+  _SoundPosRound(emoji: '🦁', word: 'LION', targetLetter: 'L',
       correctPos: _SoundPos.beginning,
       options: [_SoundPos.beginning, _SoundPos.middle, _SoundPos.end],
-      hint: 'C-A-T. C is at the BEGINNING!'),
-  _SoundPosRound(emoji: '🐱', word: 'CAT', targetLetter: 'A',
+      hint: 'L-I-O-N. L is at the BEGINNING!'),
+  _SoundPosRound(emoji: '🦁', word: 'LION', targetLetter: 'I',
       correctPos: _SoundPos.middle,
       options: [_SoundPos.beginning, _SoundPos.middle, _SoundPos.end],
-      hint: 'C-A-T. A is in the MIDDLE!'),
-  _SoundPosRound(emoji: '🐱', word: 'CAT', targetLetter: 'T',
+      hint: 'L-I-O-N. I is in the MIDDLE!'),
+  _SoundPosRound(emoji: '🦁', word: 'LION', targetLetter: 'N',
       correctPos: _SoundPos.end,
       options: [_SoundPos.beginning, _SoundPos.middle, _SoundPos.end],
-      hint: 'C-A-T. T is at the END!'),
-  _SoundPosRound(emoji: '🐶', word: 'DOG', targetLetter: 'D',
+      hint: 'L-I-O-N. N is at the END!'),
+  _SoundPosRound(emoji: '🌈', word: 'RAIN', targetLetter: 'R',
       correctPos: _SoundPos.beginning,
       options: [_SoundPos.beginning, _SoundPos.middle, _SoundPos.end],
-      hint: 'D-O-G. D is at the BEGINNING!'),
-  _SoundPosRound(emoji: '🐶', word: 'DOG', targetLetter: 'O',
+      hint: 'R-A-I-N. R is at the BEGINNING!'),
+  _SoundPosRound(emoji: '🌈', word: 'RAIN', targetLetter: 'A',
       correctPos: _SoundPos.middle,
       options: [_SoundPos.beginning, _SoundPos.middle, _SoundPos.end],
-      hint: 'D-O-G. O is in the MIDDLE!'),
-  _SoundPosRound(emoji: '🐶', word: 'DOG', targetLetter: 'G',
+      hint: 'R-A-I-N. A is in the MIDDLE!'),
+  _SoundPosRound(emoji: '🌈', word: 'RAIN', targetLetter: 'N',
       correctPos: _SoundPos.end,
       options: [_SoundPos.beginning, _SoundPos.middle, _SoundPos.end],
-      hint: 'D-O-G. G is at the END!'),
-  _SoundPosRound(emoji: '☀️', word: 'SUN', targetLetter: 'U',
-      correctPos: _SoundPos.middle,
+      hint: 'R-A-I-N. N is at the END!'),
+  _SoundPosRound(emoji: '🐋', word: 'WHALE', targetLetter: 'W',
+      correctPos: _SoundPos.beginning,
       options: [_SoundPos.beginning, _SoundPos.middle, _SoundPos.end],
-      hint: 'S-U-N. U is in the MIDDLE!'),
+      hint: 'W-H-A-L-E. W is at the BEGINNING!'),
 ];
 
 List<_SoundPosRound> _roundsFor(Difficulty d) {
@@ -173,19 +176,26 @@ class _SoundPositionScreenState extends State<SoundPositionScreen>
   void _pick(_SoundPos pos) async {
     if (_answered) return;
     final isCorrect = pos == _round.correctPos;
-    setState(() { _picked = pos; _answered = true; if (isCorrect) _correct++; });
+    setState(() => _picked = pos);
 
     final provider = context.read<AppProvider>();
     if (isCorrect) {
+      setState(() { _answered = true; _correct++; });
+      // Play correct.mp3 tone first — no voice feedback competing with it
       provider.audio.playCorrect();
       _confettiKey.currentState?.fire();
       provider.addXP((8 * widget.difficulty.xpMultiplier).round());
       provider.addStar();
-      provider.voiceFeedback.playPraise();
+      // Wait for tone to finish before speaking
+      await Future.delayed(const Duration(milliseconds: 700));
       await provider.speak('${_round.targetLetter} is at the ${_round.correctPos.label}! ${_round.hint}');
     } else {
+      // Wrong — play wrong.mp3 tone first, then voice
       provider.audio.playWrong();
-      await provider.speak('Not quite! ${_round.hint}');
+      await Future.delayed(const Duration(milliseconds: 700));
+      await provider.speak('Try again! Listen carefully!');
+      await Future.delayed(const Duration(milliseconds: 600));
+      if (mounted) setState(() => _picked = null);
     }
   }
 
@@ -315,17 +325,27 @@ class _SoundPositionScreenState extends State<SoundPositionScreen>
                         ),
                       ),
                       const SizedBox(height: 12),
-                      // Word with target letter highlighted
+                      // Word with target letter underlined (no yellow — difficulty-neutral)
                       RichText(
                         text: TextSpan(
                           children: _round.word.split('').map((ch) {
                             final isTarget = ch == _round.targetLetter;
+                            // Only underline on Easy — Medium/Hard show no hint
+                            final showUnderline = isTarget &&
+                                widget.difficulty == Difficulty.easy;
                             return TextSpan(
                               text: ch,
                               style: GoogleFonts.fredoka(
                                 fontSize: 36,
-                                color: isTarget ? AppColors.gold : Colors.white,
-                                shadows: isTarget ? [const Shadow(color: Colors.black26, blurRadius: 8)] : null,
+                                color: Colors.white,
+                                decoration: showUnderline
+                                    ? TextDecoration.underline
+                                    : TextDecoration.none,
+                                decorationColor: Colors.white,
+                                decorationThickness: 3,
+                                fontWeight: (isTarget && widget.difficulty != Difficulty.hard)
+                                    ? FontWeight.w900
+                                    : FontWeight.normal,
                               ),
                             );
                           }).toList(),
@@ -335,15 +355,20 @@ class _SoundPositionScreenState extends State<SoundPositionScreen>
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                         decoration: BoxDecoration(
-                            color: AppColors.gold.withOpacity(0.2), borderRadius: BorderRadius.circular(20)),
+                            color: Colors.white.withOpacity(0.15),
+                            borderRadius: BorderRadius.circular(20)),
                         child: Text(
                           'Where is the "${_round.targetLetter}" sound?',
-                          style: GoogleFonts.nunito(fontSize: 13, fontWeight: FontWeight.w900, color: AppColors.gold),
+                          style: GoogleFonts.nunito(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w900,
+                              color: Colors.white),
                         ),
                       ),
                       const SizedBox(height: 10),
+                      // Speaker button shown on all difficulties
                       GestureDetector(
-                        onTap: () => provider.speak(_round.word[0].toUpperCase() + _round.word.substring(1).toLowerCase()),
+                        onTap: () => provider.speakHint(_round.word[0].toUpperCase() + _round.word.substring(1).toLowerCase()),
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
                           decoration: BoxDecoration(
@@ -351,7 +376,7 @@ class _SoundPositionScreenState extends State<SoundPositionScreen>
                           child: Row(mainAxisSize: MainAxisSize.min, children: [
                             const Text('🔊', style: TextStyle(fontSize: 16)),
                             const SizedBox(width: 6),
-                            Text('Hear the hint', style: GoogleFonts.nunito(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.white)),
+                            Text('Hear the word', style: GoogleFonts.nunito(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.white)),
                           ]),
                         ),
                       ),
@@ -374,7 +399,7 @@ class _SoundPositionScreenState extends State<SoundPositionScreen>
                     Color text = Colors.white;
 
                     if (_answered && isCorrect) { bg = AppColors.teal.withOpacity(0.15); border = AppColors.teal; text = AppColors.teal; }
-                    else if (_answered && isPicked && !isCorrect) { bg = AppColors.wrong.withOpacity(0.12); border = AppColors.wrong; text = AppColors.wrong; }
+                    else if (!_answered && _picked == pos && pos != _round.correctPos) { bg = AppColors.wrong.withOpacity(0.12); border = AppColors.wrong; text = AppColors.wrong; }
 
                     return Expanded(
                       child: GestureDetector(
@@ -392,7 +417,7 @@ class _SoundPositionScreenState extends State<SoundPositionScreen>
                             Text(pos.label,
                                 style: GoogleFonts.fredoka(fontSize: 14, color: text)),
                             if (_answered && isCorrect) const Text('✅', style: TextStyle(fontSize: 16)),
-                            if (_answered && isPicked && !isCorrect) const Text('❌', style: TextStyle(fontSize: 16)),
+                            if (!_answered && _picked == pos && pos != _round.correctPos) const Text('❌', style: TextStyle(fontSize: 16)),
                           ]),
                         ),
                       ),

@@ -41,7 +41,7 @@ final List<LetterItem> allLetters = [
   LetterItem(letter: 'U', emoji: '☂️', word: 'Umbrella',  sound: 'U says Uhh! Like Umbrella!'),
   LetterItem(letter: 'V', emoji: '🎻', word: 'Violin',    sound: 'V says Vvv! Like Violin!'),
   LetterItem(letter: 'W', emoji: '🐋', word: 'Whale',     sound: 'W says Www! Like Whale!'),
-  LetterItem(letter: 'X', emoji: '🎶', word: 'Xylophone', sound: 'X says Ksss! Like Xylophone!'),
+  LetterItem(letter: 'X', emoji: '❌', word: 'X-Sign', sound: 'X says Ksss! Like X-Sign!'),
   LetterItem(letter: 'Y', emoji: '🧶', word: 'Yarn',      sound: 'Y says Yyy! Like Yarn!'),
   LetterItem(letter: 'Z', emoji: '🦓', word: 'Zebra',     sound: 'Z says Zzz! Like Zebra!'),
 ];
@@ -132,28 +132,36 @@ final List<MemoryPair> memoryPairs = [
 
 // ── Difficulty-tiered Sound Match rounds ─────────────────────────────────
 
-/// Easy: A–F, 3 choices
+/// Easy: S–X, 3 choices — unique set, different from Phonics Quiz Easy (A–E)
 final List<SoundRound> soundRoundsEasy = [
-  SoundRound(emoji: '🍎', word: 'Apple',  correctLetter: 'A', options: ['A','B','C'],    voiceHint: 'Apple! Ahh... Apple!'),
-  SoundRound(emoji: '🍌', word: 'Banana', correctLetter: 'B', options: ['A','B','C'],    voiceHint: 'Banana! Buh... Banana!'),
-  SoundRound(emoji: '🐱', word: 'Cat',    correctLetter: 'C', options: ['B','C','D'],    voiceHint: 'Cat! Cuh... Cat!'),
-  SoundRound(emoji: '🐶', word: 'Dog',    correctLetter: 'D', options: ['C','D','E'],    voiceHint: 'Dog! Duh... Dog!'),
-  SoundRound(emoji: '🥚', word: 'Egg',    correctLetter: 'E', options: ['D','E','F'],    voiceHint: 'Egg! Ehh... Egg!'),
-  SoundRound(emoji: '🐟', word: 'Fish',   correctLetter: 'F', options: ['E','F','G'],    voiceHint: 'Fish! Fff... Fish!'),
+  SoundRound(emoji: '☀️',  word: 'Sun',      correctLetter: 'S', options: ['S','T','R'],       voiceHint: 'Sun! Sss... Sun!'),
+  SoundRound(emoji: '🐢',  word: 'Turtle',   correctLetter: 'T', options: ['S','T','U'],       voiceHint: 'Turtle! Tuh... Turtle!'),
+  SoundRound(emoji: '☂️',  word: 'Umbrella', correctLetter: 'U', options: ['U','V','O'],       voiceHint: 'Umbrella! Uhh... Umbrella!'),
+  SoundRound(emoji: '🎻',  word: 'Violin',   correctLetter: 'V', options: ['V','W','B'],       voiceHint: 'Violin! Vvv... Violin!'),
+  SoundRound(emoji: '🐋',  word: 'Whale',    correctLetter: 'W', options: ['W','V','Y'],       voiceHint: 'Whale! Www... Whale!'),
+  SoundRound(emoji: '❌',  word: 'X-Sign',   correctLetter: 'X', options: ['X','Z','S'],       voiceHint: 'X-Sign! Ksss... X-Sign!'),
 ];
 
-/// Medium: A–N, 4 choices (same as original)
-final List<SoundRound> soundRoundsMedium = soundRounds;
+/// Medium: N–T, 4 choices — unique set, different from Phonics Quiz Medium (F–K)
+final List<SoundRound> soundRoundsMedium = [
+  SoundRound(emoji: '🌰',  word: 'Nut',      correctLetter: 'N', options: ['N','M','R','L'],   voiceHint: 'Nut! Nnn... Nut!'),
+  SoundRound(emoji: '🐙',  word: 'Octopus',  correctLetter: 'O', options: ['O','U','A','E'],   voiceHint: 'Octopus! Ohh... Octopus!'),
+  SoundRound(emoji: '🐷',  word: 'Pig',      correctLetter: 'P', options: ['P','B','D','T'],   voiceHint: 'Pig! Puh... Pig!'),
+  SoundRound(emoji: '👑',  word: 'Queen',    correctLetter: 'Q', options: ['Q','K','C','G'],   voiceHint: 'Queen! Kww... Queen!'),
+  SoundRound(emoji: '🌈',  word: 'Rainbow',  correctLetter: 'R', options: ['R','L','W','N'],   voiceHint: 'Rainbow! Rrr... Rainbow!'),
+  SoundRound(emoji: '☀️',  word: 'Sun',      correctLetter: 'S', options: ['S','Z','C','X'],   voiceHint: 'Sun! Sss... Sun!'),
+  SoundRound(emoji: '🐢',  word: 'Turtle',   correctLetter: 'T', options: ['T','D','S','P'],   voiceHint: 'Turtle! Tuh... Turtle!'),
+];
 
-/// Hard: A–Z, 5 choices, less obvious distractors
+/// Hard: U–Z + harder combos, 5 choices — unique set, different from Phonics Quiz Hard (L–R)
 final List<SoundRound> soundRoundsHard = [
-  SoundRound(emoji: '🍎', word: 'Apple',    correctLetter: 'A', options: ['A','E','O','I','U'],   voiceHint: 'Apple! Ahh... Apple!'),
-  SoundRound(emoji: '🍌', word: 'Banana',   correctLetter: 'B', options: ['B','D','P','G','V'],   voiceHint: 'Banana! Buh... Banana!'),
-  SoundRound(emoji: '🌙', word: 'Moon',     correctLetter: 'M', options: ['M','N','W','R','L'],   voiceHint: 'Moon! Mmm... Moon!'),
-  SoundRound(emoji: '🐋', word: 'Whale',    correctLetter: 'W', options: ['W','V','Y','M','H'],   voiceHint: 'Whale! Www... Whale!'),
-  SoundRound(emoji: '🦓', word: 'Zebra',    correctLetter: 'Z', options: ['Z','S','X','C','J'],   voiceHint: 'Zebra! Zzz... Zebra!'),
-  SoundRound(emoji: '👑', word: 'Queen',    correctLetter: 'Q', options: ['Q','K','C','G','W'],   voiceHint: 'Queen! Kww... Queen!'),
-  SoundRound(emoji: '🎻', word: 'Violin',   correctLetter: 'V', options: ['V','B','F','W','P'],   voiceHint: 'Violin! Vvv... Violin!'),
+  SoundRound(emoji: '☂️',  word: 'Umbrella', correctLetter: 'U', options: ['U','A','O','E','I'], voiceHint: 'Umbrella! Uhh... Umbrella!'),
+  SoundRound(emoji: '🎻',  word: 'Violin',   correctLetter: 'V', options: ['V','B','F','W','P'], voiceHint: 'Violin! Vvv... Violin!'),
+  SoundRound(emoji: '🐋',  word: 'Whale',    correctLetter: 'W', options: ['W','V','Y','M','H'], voiceHint: 'Whale! Www... Whale!'),
+  SoundRound(emoji: '❌',  word: 'X-Sign',   correctLetter: 'X', options: ['X','Z','S','C','J'], voiceHint: 'X-Sign! Ksss... X-Sign!'),
+  SoundRound(emoji: '🧶',  word: 'Yarn',     correctLetter: 'Y', options: ['Y','J','W','I','E'], voiceHint: 'Yarn! Yyy... Yarn!'),
+  SoundRound(emoji: '🦓',  word: 'Zebra',    correctLetter: 'Z', options: ['Z','S','X','C','J'], voiceHint: 'Zebra! Zzz... Zebra!'),
+  SoundRound(emoji: '👑',  word: 'Queen',    correctLetter: 'Q', options: ['Q','K','C','G','W'], voiceHint: 'Queen! Kww... Queen!'),
 ];
 
 List<SoundRound> soundRoundsForDifficulty(Difficulty d) {
@@ -189,21 +197,44 @@ final List<QuizQuestion> quizQuestionsEasy = [
       voiceHint: 'Egg! Ehh... Egg! The first sound is E!'),
 ];
 
-final List<QuizQuestion> quizQuestionsMedium = quizQuestions;
-
-final List<QuizQuestion> quizQuestionsHard = [
-  QuizQuestion(emoji: '🌙', question: 'What sound does Moon start with?',
-      correctLetter: 'M', options: ['M','N','R','W'],
-      optionEmojis: ['🌸','🌰','🌈','🐋'],
-      voiceHint: 'Moon! Mmm... Moon! The first sound is M!'),
+/// Medium: F–L, 4 choices — completely different from Easy (A–E)
+final List<QuizQuestion> quizQuestionsMedium = [
+  QuizQuestion(emoji: '🐟', question: 'What sound does Fish start with?',
+      correctLetter: 'F', options: ['H','F','V','B'],
+      optionEmojis: ['🏠','🌈','🎻','🍌'],
+      voiceHint: 'Fish! Fff... Fish! The first sound is F!'),
+  QuizQuestion(emoji: '🍇', question: 'What sound does Grapes start with?',
+      correctLetter: 'G', options: ['G','J','K','H'],
+      optionEmojis: ['🌸','🥤','🪁','🏠'],
+      voiceHint: 'Grapes! Guh... Grapes! The first sound is G!'),
+  QuizQuestion(emoji: '🏠', question: 'What sound does House start with?',
+      correctLetter: 'H', options: ['H','J','K','G'],
+      optionEmojis: ['🌸','🥤','🪁','🍇'],
+      voiceHint: 'House! Hhh... House! The first sound is H!'),
+  QuizQuestion(emoji: '🍦', question: 'What sound does Ice Cream start with?',
+      correctLetter: 'I', options: ['A','E','I','O'],
+      optionEmojis: ['🍎','🥚','🌸','🐙'],
+      voiceHint: 'Ice Cream! Ihh... Ice Cream! The first sound is I!'),
+  QuizQuestion(emoji: '🥤', question: 'What sound does Juice start with?',
+      correctLetter: 'J', options: ['J','G','K','H'],
+      optionEmojis: ['🌸','🍇','🪁','🏠'],
+      voiceHint: 'Juice! Juh... Juice! The first sound is J!'),
   QuizQuestion(emoji: '🪁', question: 'What sound does Kite start with?',
       correctLetter: 'K', options: ['K','C','G','Q'],
       optionEmojis: ['🌸','🐱','🍇','👑'],
       voiceHint: 'Kite! Kuh... Kite! The first sound is K!'),
-  QuizQuestion(emoji: '🦁', question: 'What sound does Lion start with?',
-      correctLetter: 'L', options: ['L','R','N','W'],
-      optionEmojis: ['🌸','🌈','🌰','🐋'],
-      voiceHint: 'Lion! Lll... Lion! The first sound is L!'),
+];
+
+/// Hard: S–Z, 4 choices — unique, different from Easy (A–E) and Medium (F–K)
+final List<QuizQuestion> quizQuestionsHard = [
+  QuizQuestion(emoji: '☀️', question: 'What sound does Sun start with?',
+      correctLetter: 'S', options: ['S','Z','C','X'],
+      optionEmojis: ['🌸','🦓','🐱','❌'],
+      voiceHint: 'Sun! Sss... Sun! The first sound is S!'),
+  QuizQuestion(emoji: '🐢', question: 'What sound does Turtle start with?',
+      correctLetter: 'T', options: ['T','D','S','P'],
+      optionEmojis: ['🌸','🐶','☀️','🐷'],
+      voiceHint: 'Turtle! Tuh... Turtle! The first sound is T!'),
   QuizQuestion(emoji: '☂️', question: 'What sound does Umbrella start with?',
       correctLetter: 'U', options: ['U','A','O','E'],
       optionEmojis: ['🌸','🍎','🐙','🥚'],
@@ -216,9 +247,13 @@ final List<QuizQuestion> quizQuestionsHard = [
       correctLetter: 'W', options: ['W','V','H','M'],
       optionEmojis: ['🌸','🎻','🏠','🌙'],
       voiceHint: 'Whale! Www... Whale! The first sound is W!'),
+  QuizQuestion(emoji: '🧶', question: 'What sound does Yarn start with?',
+      correctLetter: 'Y', options: ['Y','J','W','I'],
+      optionEmojis: ['🌸','🥤','🐋','🍦'],
+      voiceHint: 'Yarn! Yyy... Yarn! The first sound is Y!'),
   QuizQuestion(emoji: '🦓', question: 'What sound does Zebra start with?',
       correctLetter: 'Z', options: ['Z','S','X','C'],
-      optionEmojis: ['🌸','☀️','🎶','🐱'],
+      optionEmojis: ['🌸','☀️','❌','🐱'],
       voiceHint: 'Zebra! Zzz... Zebra! The first sound is Z!'),
 ];
 
@@ -239,17 +274,26 @@ final List<MemoryPair> memoryPairsEasy = [
   MemoryPair(letter: 'D', emoji: '🐶', word: 'Dog'),
 ]; // 4 pairs → 8 cards
 
-final List<MemoryPair> memoryPairsMedium = memoryPairs; // 6 pairs → 12 cards
-
-final List<MemoryPair> memoryPairsHard = [
-  MemoryPair(letter: 'A', emoji: '🍎', word: 'Apple'),
-  MemoryPair(letter: 'B', emoji: '🍌', word: 'Banana'),
-  MemoryPair(letter: 'C', emoji: '🐱', word: 'Cat'),
-  MemoryPair(letter: 'D', emoji: '🐶', word: 'Dog'),
+/// Medium: E–J, 6 pairs → 12 cards — completely different from Easy (A–D)
+final List<MemoryPair> memoryPairsMedium = [
   MemoryPair(letter: 'E', emoji: '🥚', word: 'Egg'),
   MemoryPair(letter: 'F', emoji: '🐟', word: 'Fish'),
   MemoryPair(letter: 'G', emoji: '🍇', word: 'Grapes'),
   MemoryPair(letter: 'H', emoji: '🏠', word: 'House'),
+  MemoryPair(letter: 'I', emoji: '🍦', word: 'Ice Cream'),
+  MemoryPair(letter: 'J', emoji: '🥤', word: 'Juice'),
+];
+
+/// Hard: K–R, 8 pairs → 16 cards — completely different from Easy (A–D) and Medium (E–J)
+final List<MemoryPair> memoryPairsHard = [
+  MemoryPair(letter: 'K', emoji: '🪁', word: 'Kite'),
+  MemoryPair(letter: 'L', emoji: '🦁', word: 'Lion'),
+  MemoryPair(letter: 'M', emoji: '🌙', word: 'Moon'),
+  MemoryPair(letter: 'N', emoji: '🌰', word: 'Nut'),
+  MemoryPair(letter: 'O', emoji: '🐙', word: 'Octopus'),
+  MemoryPair(letter: 'P', emoji: '🐷', word: 'Pig'),
+  MemoryPair(letter: 'Q', emoji: '👑', word: 'Queen'),
+  MemoryPair(letter: 'R', emoji: '🌈', word: 'Rainbow'),
 ]; // 8 pairs → 16 cards
 
 List<MemoryPair> memoryPairsForDifficulty(Difficulty d) {
@@ -263,29 +307,31 @@ List<MemoryPair> memoryPairsForDifficulty(Difficulty d) {
 // ── Voice Recognition words per difficulty ────────────────────────────────
 
 /// Words used in the pronunciation practice screen.
+/// Easy: F–J  |  Medium: K–P  |  Hard: Q–V
+/// Completely separate from Phonics Quiz (A–R) and Sound Match (S–Z)
 final Map<Difficulty, List<Map<String, String>>> voiceWords = {
   Difficulty.easy: [
-    {'word': 'Apple',  'emoji': '🍎', 'hint': 'A-pple'},
-    {'word': 'Ball',   'emoji': '⚽', 'hint': 'B-all'},
-    {'word': 'Cat',    'emoji': '🐱', 'hint': 'C-at'},
-    {'word': 'Dog',    'emoji': '🐶', 'hint': 'D-og'},
-    {'word': 'Egg',    'emoji': '🥚', 'hint': 'E-gg'},
+    {'word': 'Fish',     'emoji': '🐟', 'hint': 'F-ish'},
+    {'word': 'Grapes',   'emoji': '🍇', 'hint': 'Gr-apes'},
+    {'word': 'House',    'emoji': '🏠', 'hint': 'H-ouse'},
+    {'word': 'Ice Cream','emoji': '🍦', 'hint': 'I-ce Cream'},
+    {'word': 'Juice',    'emoji': '🥤', 'hint': 'J-uice'},
   ],
   Difficulty.medium: [
-    {'word': 'Fish',    'emoji': '🐟', 'hint': 'F-ish'},
-    {'word': 'Grapes',  'emoji': '🍇', 'hint': 'Gr-apes'},
-    {'word': 'House',   'emoji': '🏠', 'hint': 'H-ouse'},
-    {'word': 'Ice Cream','emoji': '🍦', 'hint': 'I-ce Cream'},
-    {'word': 'Juice',   'emoji': '🥤', 'hint': 'J-uice'},
-    {'word': 'Kite',    'emoji': '🪁', 'hint': 'K-ite'},
-  ],
-  Difficulty.hard: [
+    {'word': 'Kite',     'emoji': '🪁', 'hint': 'K-ite'},
     {'word': 'Lion',     'emoji': '🦁', 'hint': 'L-ion'},
     {'word': 'Moon',     'emoji': '🌙', 'hint': 'M-oon'},
+    {'word': 'Nut',      'emoji': '🌰', 'hint': 'N-ut'},
+    {'word': 'Octopus',  'emoji': '🐙', 'hint': 'Oc-to-pus'},
+    {'word': 'Pig',      'emoji': '🐷', 'hint': 'P-ig'},
+  ],
+  Difficulty.hard: [
+    {'word': 'Queen',    'emoji': '👑', 'hint': 'Qu-een'},
     {'word': 'Rainbow',  'emoji': '🌈', 'hint': 'Rain-bow'},
+    {'word': 'Sun',      'emoji': '☀️', 'hint': 'S-un'},
+    {'word': 'Turtle',   'emoji': '🐢', 'hint': 'Tur-tle'},
     {'word': 'Umbrella', 'emoji': '☂️', 'hint': 'Um-brel-la'},
     {'word': 'Violin',   'emoji': '🎻', 'hint': 'Vi-o-lin'},
-    {'word': 'Xylophone','emoji': '🎶', 'hint': 'Xy-lo-phone'},
-    {'word': 'Zebra',    'emoji': '🦓', 'hint': 'Ze-bra'},
+    {'word': 'Whale',    'emoji': '🐋', 'hint': 'Wh-ale'},
   ],
 };

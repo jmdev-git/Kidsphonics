@@ -79,13 +79,17 @@ class AppProvider extends ChangeNotifier {
 
   // ── Toggles ───────────────────────────────────────────────────────────────
 
-  /// Play pre-recorded audio for [text].
-  /// No TTS — all speech comes from assets/audio/phonics/ folders.
-  /// If voice is disabled or phrase has no file, stays silent.
+  /// Play pre-recorded audio for [text] — main speech player.
   Future<void> speak(String text) async {
     if (!_voiceEnabled) return;
     await voiceFeedback.stop();
     await phonicsAudio.tryPlay(text);
+  }
+
+  /// Play hint button audio — dedicated player, never blocked by game speech.
+  Future<void> speakHint(String text) async {
+    if (!_voiceEnabled) return;
+    await phonicsAudio.tryPlayHint(text);
   }
 
   void toggleVoice() {

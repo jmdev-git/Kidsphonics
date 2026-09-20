@@ -7,7 +7,6 @@ import '../providers/app_provider.dart';
 import '../widgets/shared_widgets.dart';
 import 'games_screen.dart';
 import 'letter_sounds_screen.dart';
-import 'alphabet_order_screen.dart';
 import 'rhyming_words_screen.dart';
 import 'progress_screen.dart';
 
@@ -89,21 +88,6 @@ class LessonsScreen extends StatelessWidget {
                               builder: (_) => RhymingWordsScreen(difficulty: d))),
                     ),
                     onSpeak: () => context.read<AppProvider>().speak('Cat, Bat, Hat! They rhyme!'),
-                  ),
-                  const SizedBox(height: 10),
-                  _LessonRow(
-                    icon: '🔡', title: 'Alphabet Order',
-                    subtitle: 'Tap A → Z in order · Easy, Medium or Hard',
-                    status: LessonStatus.done, stars: 3,
-                    onTap: () => showDifficultyPicker(
-                      context: context,
-                      gameTitle: 'Alphabet Order',
-                      gameIcon: '🔤',
-                      onSelected: (d) => Navigator.push(context,
-                          MaterialPageRoute(builder: (_) => AlphabetOrderScreen(difficulty: d))),
-                    ),
-                    onSpeak: () => context.read<AppProvider>().speak(
-                        'A, B, C, D, E, F! Can you put the alphabet in order?'),
                   ),
                 ],
               ),

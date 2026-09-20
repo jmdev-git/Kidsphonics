@@ -52,11 +52,11 @@ class _PhonicsQuizScreenState extends State<PhonicsQuizScreen> {
       _confettiKey.currentState?.fire();
       provider.addXP((5 * widget.difficulty.xpMultiplier).round());
       provider.addStar();
-      provider.voiceFeedback.playPraise();
+      await Future.delayed(const Duration(milliseconds: 700));
       await provider.speak('Correct! ${_q.correctLetter} is the right answer! Well done!');
     } else {
       provider.audio.playWrong();
-      provider.voiceFeedback.playWrongQuiz();
+      await Future.delayed(const Duration(milliseconds: 700));
       await provider.speak('Not quite! The answer is ${_q.correctLetter}! ${_q.voiceHint}');
     }
   }
@@ -204,7 +204,7 @@ class _PhonicsQuizScreenState extends State<PhonicsQuizScreen> {
                     child: Column(children: [
                       Text(_q.emoji, style: const TextStyle(fontSize: 72)),
                       const SizedBox(height: 8),
-                      Text(_q.question,
+                      Text('What sound does this start with?',
                           textAlign: TextAlign.center,
                           style: GoogleFonts.fredoka(fontSize: 19, color: Colors.white)),
                       const SizedBox(height: 8),
@@ -214,7 +214,7 @@ class _PhonicsQuizScreenState extends State<PhonicsQuizScreen> {
                                 color: const Color(0xFF4CAF50))),
                         const SizedBox(width: 10),
                         SpeakButton(
-                          onTap: () => provider.speak(_q.voiceHint),
+                          onTap: () => provider.speakHint(_q.voiceHint),
                           size: 40,
                           bgColor: AppColors.teal,
                         ),

@@ -36,10 +36,8 @@ class _SoundMatchScreenState extends State<SoundMatchScreen> {
   void initState() {
     super.initState();
     _opts = _shuffledOpts;
-    // Play game intro after a short delay
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<AppProvider>().voiceFeedback.playIntroSoundMatch();
-    });
+    // No intro voice — keep Sound Match silent until child taps
+    WidgetsBinding.instance.addPostFrameCallback((_) {});
   }
 
   void _nextRound() {
@@ -70,7 +68,7 @@ class _SoundMatchScreenState extends State<SoundMatchScreen> {
     provider.audio.playWin();
     provider.addXP((10 * widget.difficulty.xpMultiplier).round());
     _confettiKey.currentState?.fire();
-    provider.voiceFeedback.playWinSoundMatch();
+    // No win voice — tones only
 
     showDialog(
       context: context,
@@ -157,7 +155,10 @@ class _SoundMatchScreenState extends State<SoundMatchScreen> {
   }
 
   void _pick(String letter) async {
-    if (_roundDone || _picks.containsKey(letter)) return;
+    if (_roundDone) return;
+    // Block re-tap only if already marked correct (green) — wrong picks are retryable
+    if (_picks[letter] == true) return;
+
     final isCorrect = letter == _round.correctLetter;
     setState(() {
       _picks[letter] = isCorrect;
@@ -172,14 +173,12 @@ class _SoundMatchScreenState extends State<SoundMatchScreen> {
       _confettiKey.currentState?.fire();
       provider.addXP((5 * widget.difficulty.xpMultiplier).round());
       provider.addStar();
-      provider.voiceFeedback.playPraise();
-      await provider.speak('Yes! ${_round.correctLetter} is for ${_round.word}! Great job!');
-      await Future.delayed(const Duration(milliseconds: 1200));
+      // No voice — correct.mp3 tone only, then move to next round
+      await Future.delayed(const Duration(milliseconds: 1000));
       if (mounted) _nextRound();
     } else {
+      // Wrong — play tone, show red flash briefly, then clear so child can retry
       provider.audio.playWrong();
-      await provider.speak('Hmm, try again! Listen carefully!');
-      // Clear the wrong pick after a short delay so child can try again
       await Future.delayed(const Duration(milliseconds: 800));
       if (mounted) setState(() => _picks.remove(letter));
     }
@@ -263,7 +262,7 @@ class _SoundMatchScreenState extends State<SoundMatchScreen> {
                                 color: const Color(0xFF9B6720))),
                         const SizedBox(width: 10),
                         SpeakButton(
-                          onTap: () => provider.speak(_round.voiceHint),
+                          onTap: () => provider.speakHint(_round.voiceHint),
                           size: 50,
                         ),
                       ]),
