@@ -96,7 +96,7 @@ class _AlphabetOrderScreenState extends State<AlphabetOrderScreen>
       if (_finished) {
         await Future.delayed(const Duration(milliseconds: 500));
         if (mounted) {
-          _confettiKey.currentState?.fire();
+          _confettiKey.currentState?.fireWin();
           provider.audio.playWin();
           provider.addXP((15 * widget.difficulty.xpMultiplier).round());
           provider.voiceFeedback.playWinAlphabet();

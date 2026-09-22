@@ -266,7 +266,7 @@ class _RhymingWordsScreenState extends State<RhymingWordsScreen>
     provider.audio.playWin();
     provider.addXP((20 * widget.difficulty.xpMultiplier).round());
     provider.markRhymingWordsDone();
-    _confettiKey.currentState?.fire();
+    _confettiKey.currentState?.fireWin();
     provider.voiceFeedback.playWinByScore(_correct, _rounds.length, game: 'rhyming');
 
     showDialog(

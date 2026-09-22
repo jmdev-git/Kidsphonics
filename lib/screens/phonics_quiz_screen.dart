@@ -78,7 +78,7 @@ class _PhonicsQuizScreenState extends State<PhonicsQuizScreen> {
     final provider = context.read<AppProvider>();
     provider.addXP((20 * widget.difficulty.xpMultiplier).round());
     provider.audio.playWin();
-    _confettiKey.currentState?.fire();
+    _confettiKey.currentState?.fireWin();
     provider.voiceFeedback.playWinByScore(_correct, _questions.length, game: 'quiz');
     showDialog(context: context, barrierDismissible: false, builder: (_) => AlertDialog(
       backgroundColor: AppColors.darkBg,

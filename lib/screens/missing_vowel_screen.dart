@@ -164,7 +164,7 @@ class _MissingVowelScreenState extends State<MissingVowelScreen>
     final provider = context.read<AppProvider>();
     provider.audio.playWin();
     provider.addXP((15 * widget.difficulty.xpMultiplier).round());
-    _confettiKey.currentState?.fire();
+    _confettiKey.currentState?.fireWin();
     provider.voiceFeedback.playWinByScore(_correct, _puzzles.length, game: 'quiz');
 
     showDialog(

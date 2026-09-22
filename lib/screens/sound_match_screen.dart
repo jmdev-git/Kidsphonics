@@ -67,7 +67,7 @@ class _SoundMatchScreenState extends State<SoundMatchScreen> {
     final provider = context.read<AppProvider>();
     provider.audio.playWin();
     provider.addXP((10 * widget.difficulty.xpMultiplier).round());
-    _confettiKey.currentState?.fire();
+    _confettiKey.currentState?.fireWin();
     // No win voice — tones only
 
     showDialog(

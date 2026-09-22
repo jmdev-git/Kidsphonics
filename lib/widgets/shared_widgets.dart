@@ -1,6 +1,7 @@
 // lib/widgets/shared_widgets.dart
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'dart:math';
 import '../theme/app_theme.dart';
 import '../models/difficulty.dart';
 // NOTE: ProgressScreen is imported lazily inside KidsBottomNav to avoid
@@ -212,7 +213,39 @@ class XpBadge extends StatelessWidget {
   }
 }
 
-// ── Confetti overlay ──────────────────────────────────────────────────────
+// ── Confetti / Fireworks overlay ─────────────────────────────────────────
+
+// ── Data models ──────────────────────────────────────────────────────────
+
+class _ConfettiPiece {
+  final double x, delay;
+  final Color color;
+  _ConfettiPiece({required this.x, required this.color, required this.delay});
+}
+
+// Firework rocket — shoots upward then bursts
+class _Rocket {
+  final double startX;   // 0–1 normalized x
+  final double burstY;   // 0–1 normalized y where it explodes
+  final Color color;
+  final double delay;    // staggered launch time 0–0.4
+  final List<_Spark> sparks;
+  _Rocket({
+    required this.startX, required this.burstY,
+    required this.color, required this.delay,
+    required this.sparks,
+  });
+}
+
+// Individual spark from a burst
+class _Spark {
+  final double angle; // radians
+  final double speed; // normalized 0–1
+  final Color color;
+  _Spark({required this.angle, required this.speed, required this.color});
+}
+
+// ── ConfettiOverlay (wraps game screens) ──────────────────────────────────
 class ConfettiOverlay extends StatefulWidget {
   final Widget child;
   final GlobalKey<ConfettiOverlayState> overlayKey;
@@ -223,31 +256,73 @@ class ConfettiOverlay extends StatefulWidget {
   ConfettiOverlayState createState() => ConfettiOverlayState();
 }
 
-class ConfettiOverlayState extends State<ConfettiOverlay> with TickerProviderStateMixin {
+class ConfettiOverlayState extends State<ConfettiOverlay>
+    with TickerProviderStateMixin {
+  // Small confetti burst (per correct answer)
   List<_ConfettiPiece> _pieces = [];
-  late AnimationController _ctrl;
+  late AnimationController _confettiCtrl;
+
+  // Big fireworks (game win)
+  List<_Rocket> _rockets = [];
+  late AnimationController _fireworksCtrl;
+  final _rng = Random();
 
   @override
   void initState() {
     super.initState();
-    _ctrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 1400));
+    _confettiCtrl = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 1400));
+    _fireworksCtrl = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 3200));
   }
 
+  // ── Per-answer sparkle confetti ──
   void fire() {
-    final colors = [AppColors.gold, AppColors.pink, AppColors.teal, AppColors.purple,
-                    const Color(0xFFFF4757), AppColors.blue, AppColors.orange];
+    final colors = [
+      AppColors.gold, AppColors.pink, AppColors.teal, AppColors.purple,
+      const Color(0xFFFF4757), AppColors.blue, AppColors.orange,
+    ];
     _pieces = List.generate(36, (i) => _ConfettiPiece(
       x: 0.05 + (i % 10) * 0.09,
       color: colors[i % colors.length],
       delay: (i * 0.02),
     ));
-    _ctrl.forward(from: 0);
+    _confettiCtrl.forward(from: 0);
+    setState(() {});
+  }
+
+  // ── Full fireworks (game win) ──
+  void fireWin() {
+    final colors = [
+      AppColors.gold, AppColors.pink, AppColors.teal,
+      const Color(0xFFFF4757), AppColors.orange,
+      const Color(0xFFCE93D8), const Color(0xFF90CAF9),
+    ];
+    _rockets = List.generate(7, (i) {
+      final color = colors[i % colors.length];
+      final sparks = List.generate(20, (j) => _Spark(
+        angle: (j / 20) * 2 * pi,
+        speed: 0.5 + _rng.nextDouble() * 0.5,
+        color: j.isEven
+            ? color
+            : Colors.white.withOpacity(0.85),
+      ));
+      return _Rocket(
+        startX: 0.1 + _rng.nextDouble() * 0.8,
+        burstY: 0.15 + _rng.nextDouble() * 0.45,
+        color: color,
+        delay: i * 0.12,
+        sparks: sparks,
+      );
+    });
+    _fireworksCtrl.forward(from: 0);
     setState(() {});
   }
 
   @override
   void dispose() {
-    _ctrl.dispose();
+    _confettiCtrl.dispose();
+    _fireworksCtrl.dispose();
     super.dispose();
   }
 
@@ -256,14 +331,30 @@ class ConfettiOverlayState extends State<ConfettiOverlay> with TickerProviderSta
     return Stack(
       children: [
         widget.child,
+
+        // Small confetti
         AnimatedBuilder(
-          animation: _ctrl,
+          animation: _confettiCtrl,
           builder: (_, __) {
-            if (_ctrl.value == 0) return const SizedBox();
+            if (_confettiCtrl.value == 0) return const SizedBox();
             return IgnorePointer(
               child: CustomPaint(
                 size: Size.infinite,
-                painter: _ConfettiPainter(_pieces, _ctrl.value),
+                painter: _ConfettiPainter(_pieces, _confettiCtrl.value),
+              ),
+            );
+          },
+        ),
+
+        // Fireworks
+        AnimatedBuilder(
+          animation: _fireworksCtrl,
+          builder: (_, __) {
+            if (_fireworksCtrl.value == 0) return const SizedBox();
+            return IgnorePointer(
+              child: CustomPaint(
+                size: Size.infinite,
+                painter: _FireworksPainter(_rockets, _fireworksCtrl.value),
               ),
             );
           },
@@ -273,12 +364,7 @@ class ConfettiOverlayState extends State<ConfettiOverlay> with TickerProviderSta
   }
 }
 
-class _ConfettiPiece {
-  final double x, delay;
-  final Color color;
-  _ConfettiPiece({required this.x, required this.color, required this.delay});
-}
-
+// ── Small confetti painter (per correct answer) ───────────────────────────
 class _ConfettiPainter extends CustomPainter {
   final List<_ConfettiPiece> pieces;
   final double progress;
@@ -304,6 +390,99 @@ class _ConfettiPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_ConfettiPainter old) => old.progress != progress;
+}
+
+// ── Full fireworks painter (game win) ─────────────────────────────────────
+class _FireworksPainter extends CustomPainter {
+  final List<_Rocket> rockets;
+  final double progress; // 0–1 over 3200ms
+
+  _FireworksPainter(this.rockets, this.progress);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    for (final rocket in rockets) {
+      // Each rocket has its own local time accounting for delay
+      final localT = ((progress - rocket.delay) / (1.0 - rocket.delay))
+          .clamp(0.0, 1.0);
+      if (localT <= 0) continue;
+
+      final burstX = rocket.startX * size.width;
+      final burstY = rocket.burstY * size.height;
+
+      // Phase 1 (0–0.3): Rocket trails upward
+      if (localT < 0.35) {
+        final rocketT = localT / 0.35;
+        final startY = size.height * 0.95;
+        final currentY = startY + (burstY - startY) * rocketT;
+
+        // Trail
+        for (int i = 0; i < 6; i++) {
+          final trailT = (rocketT - i * 0.04).clamp(0.0, 1.0);
+          if (trailT <= 0) continue;
+          final trailY = startY + (burstY - startY) * (rocketT - i * 0.04);
+          final trailPaint = Paint()
+            ..color = rocket.color.withOpacity((0.8 - i * 0.13) * trailT)
+            ..style = PaintingStyle.fill
+            ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 3);
+          canvas.drawCircle(Offset(burstX, trailY), 4.0 - i * 0.5, trailPaint);
+        }
+
+        // Rocket head
+        final headPaint = Paint()
+          ..color = Colors.white.withOpacity(rocketT)
+          ..style = PaintingStyle.fill
+          ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4);
+        canvas.drawCircle(Offset(burstX, currentY), 5, headPaint);
+      }
+      // Phase 2 (0.3–1.0): Burst explosion
+      else {
+        final burstT = ((localT - 0.35) / 0.65).clamp(0.0, 1.0);
+        final fadeOut = (1 - burstT).clamp(0.0, 1.0);
+
+        // Flash at burst point
+        if (burstT < 0.15) {
+          final flashPaint = Paint()
+            ..color = Colors.white.withOpacity((1 - burstT / 0.15) * 0.9)
+            ..maskFilter = MaskFilter.blur(BlurStyle.normal, 20 * (1 - burstT / 0.15));
+          canvas.drawCircle(Offset(burstX, burstY),
+              30 * (burstT / 0.15), flashPaint);
+        }
+
+        // Sparks radiating outward
+        for (final spark in rocket.sparks) {
+          final dist = spark.speed * burstT * size.height * 0.28;
+          final sparkX = burstX + cos(spark.angle) * dist;
+          final sparkY = burstY +
+              sin(spark.angle) * dist +
+              burstT * burstT * size.height * 0.04; // gravity pull down
+
+          final sparkPaint = Paint()
+            ..color = spark.color.withOpacity(fadeOut * 0.9)
+            ..style = PaintingStyle.fill
+            ..maskFilter = MaskFilter.blur(BlurStyle.normal, 2.5 * fadeOut);
+
+          final sparkSize = (3.5 - burstT * 2.5).clamp(0.5, 3.5);
+          canvas.drawCircle(Offset(sparkX, sparkY), sparkSize, sparkPaint);
+        }
+
+        // Glitter ring
+        final ringPaint = Paint()
+          ..color = rocket.color.withOpacity(fadeOut * 0.3)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.5
+          ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 3);
+        canvas.drawCircle(
+          Offset(burstX, burstY),
+          burstT * size.height * 0.18,
+          ringPaint,
+        );
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(_FireworksPainter old) => old.progress != progress;
 }
 
 // ── Difficulty picker bottom-sheet ───────────────────────────────────────

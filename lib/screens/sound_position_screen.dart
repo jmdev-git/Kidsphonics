@@ -213,7 +213,7 @@ class _SoundPositionScreenState extends State<SoundPositionScreen>
     final provider = context.read<AppProvider>();
     provider.audio.playWin();
     provider.addXP((15 * widget.difficulty.xpMultiplier).round());
-    _confettiKey.currentState?.fire();
+    _confettiKey.currentState?.fireWin();
     provider.voiceFeedback.playWinByScore(_correct, _rounds.length, game: 'quiz');
 
     showDialog(

@@ -86,7 +86,7 @@ class _MemoryGameScreenState extends State<MemoryGameScreen> {
         provider.addXP((5 * widget.difficulty.xpMultiplier).round());
         provider.addStar();
         if (_matchCount == _totalPairs) {
-          _confettiKey.currentState?.fire();
+          _confettiKey.currentState?.fireWin();
           provider.audio.playWin();
           provider.addXP((10 * widget.difficulty.xpMultiplier).round());
           provider.voiceFeedback.playWinMemory();
